@@ -1,0 +1,397 @@
+[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for com.astrocharts:astrocharts-backend:jar:0.0.1-SNAPSHOT
+[WARNING] 'dependencies.dependency.systemPath' for com.astroservices:astro:jar should use a variable instead of a hard-coded path c:/Users/shamk/CascadeProjects/astrocharts/backend/lib/astro-1.0.jar @ line 49, column 21
+[WARNING] 'dependencies.dependency.systemPath' for com.sweph:swisseph:jar should use a variable instead of a hard-coded path c:/Users/shamk/CascadeProjects/astrocharts/backend/lib/swisseph-2.01.00-02.jar @ line 56, column 21
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO] 
+[INFO] ----------------< com.astrocharts:astrocharts-backend >-----------------
+[INFO] Building AstroCharts Backend 0.0.1-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ astrocharts-backend ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ astrocharts-backend ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 23 source files with javac [debug release 17] to target\classes
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\dto\InstructionMeta.java]]
+[INFO] [parsing completed 15ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\GlobalSettings.java]]
+[INFO] [parsing completed 2ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\dto\ChartDataResponse.java]]
+[INFO] [parsing completed 0ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\dto\StudyResult.java]]
+[INFO] [parsing completed 0ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\SymbolController.java]]
+[INFO] [parsing completed 0ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\Commons.java]]
+[INFO] [parsing completed 3ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\AllListsManager.java]]
+[INFO] [parsing completed 4ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\dto\DrawingInstruction.java]]
+[INFO] [parsing completed 0ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\dto\InstructionParams.java]]
+[INFO] [parsing completed 0ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\TickerList.java]]
+[INFO] [parsing completed 0ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\SharedCacheService.java]]
+[INFO] [parsing completed 0ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\dto\InstructionStyle.java]]
+[INFO] [parsing completed 6ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\dto\DatePair.java]]
+[INFO] [parsing completed 0ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\Study.java]]
+[INFO] [parsing completed 0ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\PlanetaryIngressStudy.java]]
+[INFO] [parsing completed 0ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\WebConfig.java]]
+[INFO] [parsing completed 0ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java]]
+[INFO] [parsing completed 4ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\dto\DataPoint.java]]
+[INFO] [parsing completed 0ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\StudyGroup.java]]
+[INFO] [parsing completed 0ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\DataParser.java]]
+[INFO] [parsing completed 2ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\AstroChartsApplication.java]]
+[INFO] [parsing completed 0ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\RowRecord.java]]
+[INFO] [parsing completed 4ms]
+[INFO] [parsing started SimpleFileObject[C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\FollowStudyController.java]]
+[INFO] [parsing completed 0ms]
+[INFO] [loading /H/java.base/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.management/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.charsets/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.security.auth/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.attach/module-info.sig]
+[INFO] [loading /GHIJK/jdk.javadoc/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.localedata/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.sctp/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.dynalink/module-info.sig]
+[INFO] [loading /BCDEFGH/jdk.httpserver/module-info.sig]
+[INFO] [loading /GH/jdk.management.jfr/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.jstatd/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/java.datatransfer/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/java.se/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.naming.rmi/module-info.sig]
+[INFO] [loading /HIJK/java.rmi/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/java.security.sasl/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.crypto.cryptoki/module-info.sig]
+[INFO] [loading /GHI/jdk.compiler/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/java.desktop/module-info.sig]
+[INFO] [loading /GHIJ/jdk.incubator.vector/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.crypto.ec/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.xml.dom/module-info.sig]
+[INFO] [loading /CDEFGHIJK/java.naming/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/java.prefs/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.jshell/module-info.sig]
+[INFO] [loading /FGHIJK/jdk.nio.mapmode/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/java.smartcardio/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.editpad/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/java.management.rmi/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/java.xml.crypto/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/java.instrument/module-info.sig]
+[INFO] [loading /BCDEFGHI/jdk.management.agent/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.jconsole/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/java.compiler/module-info.sig]
+[INFO] [loading /GHIJK/jdk.jfr/module-info.sig]
+[INFO] [loading /EFGHI/jdk.incubator.foreign/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.unsupported/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/java.transaction.xa/module-info.sig]
+[INFO] [loading /BCDEFGHIJ/jdk.jartool/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/java.security.jgss/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.jdi/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.jdwp.agent/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/java.scripting/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/java.net.http/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.net/module-info.sig]
+[INFO] [loading /BCDEFGHIJ/java.management/module-info.sig]
+[INFO] [loading /GHIJ/jdk.jpackage/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/java.logging/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.jdeps/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.naming.dns/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.hotspot.agent/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.accessibility/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.zipfs/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/java.sql.rowset/module-info.sig]
+[INFO] [loading /EFGHIJK/jdk.jsobject/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/java.sql/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.security.jgss/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/jdk.jcmd/module-info.sig]
+[INFO] [loading /EFGH/jdk.jlink/module-info.sig]
+[INFO] [loading /BCDEFGHIJK/java.xml/module-info.sig]
+[INFO] [search path for source files: C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java,C:\Users\shamk\CascadeProjects\astrocharts\backend\target\generated-sources\annotations]
+[INFO] [search path for class files: C:\Program Files\Microsoft\jdk-21.0.6.7-hotspot\lib\modules,C:\Users\shamk\CascadeProjects\astrocharts\backend\target\classes,C:\Users\shamk\.m2\repository\org\springframework\boot\spring-boot-starter-web\3.2.0\spring-boot-starter-web-3.2.0.jar,C:\Users\shamk\.m2\repository\org\springframework\boot\spring-boot-starter\3.2.0\spring-boot-starter-3.2.0.jar,C:\Users\shamk\.m2\repository\org\springframework\boot\spring-boot\3.2.0\spring-boot-3.2.0.jar,C:\Users\shamk\.m2\repository\org\springframework\boot\spring-boot-autoconfigure\3.2.0\spring-boot-autoconfigure-3.2.0.jar,C:\Users\shamk\.m2\repository\org\springframework\boot\spring-boot-starter-logging\3.2.0\spring-boot-starter-logging-3.2.0.jar,C:\Users\shamk\.m2\repository\ch\qos\logback\logback-classic\1.4.11\logback-classic-1.4.11.jar,C:\Users\shamk\.m2\repository\ch\qos\logback\logback-core\1.4.11\logback-core-1.4.11.jar,C:\Users\shamk\.m2\repository\org\apache\logging\log4j\log4j-to-slf4j\2.21.1\log4j-to-slf4j-2.21.1.jar,C:\Users\shamk\.m2\repository\org\apache\logging\log4j\log4j-api\2.21.1\log4j-api-2.21.1.jar,C:\Users\shamk\.m2\repository\org\slf4j\jul-to-slf4j\2.0.9\jul-to-slf4j-2.0.9.jar,C:\Users\shamk\.m2\repository\jakarta\annotation\jakarta.annotation-api\2.1.1\jakarta.annotation-api-2.1.1.jar,C:\Users\shamk\.m2\repository\org\yaml\snakeyaml\2.2\snakeyaml-2.2.jar,C:\Users\shamk\.m2\repository\org\springframework\boot\spring-boot-starter-json\3.2.0\spring-boot-starter-json-3.2.0.jar,C:\Users\shamk\.m2\repository\com\fasterxml\jackson\core\jackson-databind\2.15.3\jackson-databind-2.15.3.jar,C:\Users\shamk\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.15.3\jackson-annotations-2.15.3.jar,C:\Users\shamk\.m2\repository\com\fasterxml\jackson\core\jackson-core\2.15.3\jackson-core-2.15.3.jar,C:\Users\shamk\.m2\repository\com\fasterxml\jackson\datatype\jackson-datatype-jdk8\2.15.3\jackson-datatype-jdk8-2.15.3.jar,C:\Users\shamk\.m2\repository\com\fasterxml\jackson\datatype\jackson-datatype-jsr310\2.15.3\jackson-datatype-jsr310-2.15.3.jar,C:\Users\shamk\.m2\repository\com\fasterxml\jackson\module\jackson-module-parameter-names\2.15.3\jackson-module-parameter-names-2.15.3.jar,C:\Users\shamk\.m2\repository\org\springframework\boot\spring-boot-starter-tomcat\3.2.0\spring-boot-starter-tomcat-3.2.0.jar,C:\Users\shamk\.m2\repository\org\apache\tomcat\embed\tomcat-embed-core\10.1.16\tomcat-embed-core-10.1.16.jar,C:\Users\shamk\.m2\repository\org\apache\tomcat\embed\tomcat-embed-el\10.1.16\tomcat-embed-el-10.1.16.jar,C:\Users\shamk\.m2\repository\org\apache\tomcat\embed\tomcat-embed-websocket\10.1.16\tomcat-embed-websocket-10.1.16.jar,C:\Users\shamk\.m2\repository\org\springframework\spring-web\6.1.1\spring-web-6.1.1.jar,C:\Users\shamk\.m2\repository\org\springframework\spring-beans\6.1.1\spring-beans-6.1.1.jar,C:\Users\shamk\.m2\repository\io\micrometer\micrometer-observation\1.12.0\micrometer-observation-1.12.0.jar,C:\Users\shamk\.m2\repository\io\micrometer\micrometer-commons\1.12.0\micrometer-commons-1.12.0.jar,C:\Users\shamk\.m2\repository\org\springframework\spring-webmvc\6.1.1\spring-webmvc-6.1.1.jar,C:\Users\shamk\.m2\repository\org\springframework\spring-aop\6.1.1\spring-aop-6.1.1.jar,C:\Users\shamk\.m2\repository\org\springframework\spring-context\6.1.1\spring-context-6.1.1.jar,C:\Users\shamk\.m2\repository\org\springframework\spring-expression\6.1.1\spring-expression-6.1.1.jar,C:\Users\shamk\.m2\repository\org\slf4j\slf4j-api\2.0.9\slf4j-api-2.0.9.jar,C:\Users\shamk\.m2\repository\org\springframework\spring-core\6.1.1\spring-core-6.1.1.jar,C:\Users\shamk\.m2\repository\org\springframework\spring-jcl\6.1.1\spring-jcl-6.1.1.jar,C:\Users\shamk\.m2\repository\com\google\code\gson\gson\2.10.1\gson-2.10.1.jar,C:\Users\shamk\.m2\repository\javax\annotation\javax.annotation-api\1.3.2\javax.annotation-api-1.3.2.jar,c:\Users\shamk\CascadeProjects\astrocharts\backend\lib\astro-1.0.jar,c:\Users\shamk\CascadeProjects\astrocharts\backend\lib\swisseph-2.01.00-02.jar,.]
+[INFO] [loading /GH/java.base/java/lang/Object.sig]
+[INFO] [loading /GHIJK/java.base/java/lang/String.sig]
+[INFO] [loading /CDEFGH/java.base/java/lang/Enum.sig]
+[INFO] [loading /CDEFGHIJK/java.base/java/lang/constant/Constable.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/Comparable.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/io/Serializable.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/util/List.sig]
+[INFO] [loading /GHI/java.base/java/lang/Integer.sig]
+[INFO] [loading /GHIJK/java.base/java/lang/Boolean.sig]
+[INFO] [loading /GHI/java.base/java/lang/Double.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/util/ArrayList.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/util/Date.sig]
+[INFO] [loading /GHIJK/java.base/java/util/Arrays.sig]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-web\6.1.1\spring-web-6.1.1.jar(/org/springframework/web/bind/annotation/CrossOrigin.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-web\6.1.1\spring-web-6.1.1.jar(/org/springframework/web/bind/annotation/RestController.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-web\6.1.1\spring-web-6.1.1.jar(/org/springframework/web/bind/annotation/GetMapping.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-beans\6.1.1\spring-beans-6.1.1.jar(/org/springframework/beans/factory/annotation/Autowired.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\javax\annotation\javax.annotation-api\1.3.2\javax.annotation-api-1.3.2.jar(/javax/annotation/PostConstruct.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-context\6.1.1\spring-context-6.1.1.jar(/org/springframework/stereotype/Service.class)]
+[INFO] [loading /BCDEFGHIJK/java.base/java/util/Map.sig]
+[INFO] [loading /89ABCDEFGH/java.base/java/util/HashMap.sig]
+[INFO] [loading /89ABCDEFGHIJK/java.base/java/util/Collections.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/util/Iterator.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/io/IOException.sig]
+[INFO] [loading /HIJK/java.base/java/util/Map$Entry.sig]
+[INFO] [loading /89ABCDEFGHIJK/java.base/java/io/BufferedReader.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/io/BufferedWriter.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/io/FileReader.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/io/FileWriter.sig]
+[INFO] [loading C:\Users\shamk\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.15.3\jackson-annotations-2.15.3.jar(/com/fasterxml/jackson/annotation/JsonProperty.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.15.3\jackson-annotations-2.15.3.jar(/com/fasterxml/jackson/annotation/JsonSubTypes.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.15.3\jackson-annotations-2.15.3.jar(/com/fasterxml/jackson/annotation/JsonTypeInfo.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-context\6.1.1\spring-context-6.1.1.jar(/org/springframework/context/annotation/Bean.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-context\6.1.1\spring-context-6.1.1.jar(/org/springframework/context/annotation/Configuration.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-webmvc\6.1.1\spring-webmvc-6.1.1.jar(/org/springframework/web/servlet/config/annotation/CorsRegistry.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-webmvc\6.1.1\spring-webmvc-6.1.1.jar(/org/springframework/web/servlet/config/annotation/WebMvcConfigurer.class)]
+[INFO] [loading /BCDEFGHIJK/java.base/java/text/ParseException.sig]
+[INFO] [loading /GHIJK/java.base/java/time/LocalDate.sig]
+[INFO] [loading /ABCDEFGHI/java.base/java/time/format/DateTimeFormatter.sig]
+[INFO] [loading C:\Users\shamk\.m2\repository\com\google\code\gson\gson\2.10.1\gson-2.10.1.jar(/com/google/gson/Gson.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\com\google\code\gson\gson\2.10.1\gson-2.10.1.jar(/com/google/gson/JsonArray.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\com\google\code\gson\gson\2.10.1\gson-2.10.1.jar(/com/google/gson/JsonElement.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\com\google\code\gson\gson\2.10.1\gson-2.10.1.jar(/com/google/gson/JsonObject.class)]
+[INFO] [loading /9ABCDEFGHIJK/java.base/java/io/File.sig]
+[INFO] [loading /DEFGHIJK/java.base/java/text/SimpleDateFormat.sig]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\boot\spring-boot\3.2.0\spring-boot-3.2.0.jar(/org/springframework/boot/SpringApplication.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\boot\spring-boot-autoconfigure\3.2.0\spring-boot-autoconfigure-3.2.0.jar(/org/springframework/boot/autoconfigure/SpringBootApplication.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-web\6.1.1\spring-web-6.1.1.jar(/org/springframework/web/bind/annotation/PostMapping.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-web\6.1.1\spring-web-6.1.1.jar(/org/springframework/web/bind/annotation/RequestBody.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-web\6.1.1\spring-web-6.1.1.jar(/org/springframework/web/bind/annotation/RequestMapping.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-web\6.1.1\spring-web-6.1.1.jar(/org/springframework/web/bind/annotation/RequestParam.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\slf4j\slf4j-api\2.0.9\slf4j-api-2.0.9.jar(/org/slf4j/Logger.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\slf4j\slf4j-api\2.0.9\slf4j-api-2.0.9.jar(/org/slf4j/LoggerFactory.class)]
+[INFO] [loading /H/java.base/java/lang/Deprecated.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/annotation/Target.sig]
+[INFO] [loading /GHIJK/java.base/java/lang/annotation/ElementType.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/annotation/Retention.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/annotation/RetentionPolicy.sig]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-core\6.1.1\spring-core-6.1.1.jar(/org/springframework/core/annotation/AliasFor.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-web\6.1.1\spring-web-6.1.1.jar(/org/springframework/web/bind/annotation/RequestMethod.class)]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/annotation/Annotation.sig]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-web\6.1.1\spring-web-6.1.1.jar(/org/springframework/web/bind/annotation/PathVariable.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.15.3\jackson-annotations-2.15.3.jar(/com/fasterxml/jackson/annotation/JsonProperty$Access.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.15.3\jackson-annotations-2.15.3.jar(/com/fasterxml/jackson/annotation/JsonTypeInfo$As.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.15.3\jackson-annotations-2.15.3.jar(/com/fasterxml/jackson/annotation/JsonTypeInfo$Id.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.15.3\jackson-annotations-2.15.3.jar(/com/fasterxml/jackson/annotation/JsonSubTypes$Type.class)]
+[INFO] [loading /HIJ/java.base/java/lang/Class.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/Override.sig]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-context\6.1.1\spring-context-6.1.1.jar(/org/springframework/context/annotation/ComponentScan.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-context\6.1.1\spring-context-6.1.1.jar(/org/springframework/context/annotation/ComponentScan$Filter.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-context\6.1.1\spring-context-6.1.1.jar(/org/springframework/context/annotation/FilterType.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-core\6.1.1\spring-core-6.1.1.jar(/org/springframework/aot/hint/annotation/Reflective.class)]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/annotation/Repeatable.sig]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-context\6.1.1\spring-context-6.1.1.jar(/org/springframework/context/annotation/ScopedProxyMode.class)]
+[INFO] [checking com.astrocharts.dto.InstructionMeta]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/AutoCloseable.sig]
+[INFO] [checking com.astrocharts.GlobalSettings]
+[INFO] [loading /GHIJK/java.base/java/lang/Byte.sig]
+[INFO] [loading /GHIJK/java.base/java/lang/Character.sig]
+[INFO] [loading /GHIJK/java.base/java/lang/Short.sig]
+[INFO] [loading /GHI/java.base/java/lang/Long.sig]
+[INFO] [loading /GHI/java.base/java/lang/Float.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/Void.sig]
+[INFO] [loading /GHIJK/java.base/java/util/Optional.sig]
+[INFO] [loading /CDEFGHIJK/java.base/java/lang/Enum$EnumDesc.sig]
+[INFO] [loading /HIJK/java.base/java/lang/constant/DynamicConstantDesc.sig]
+[INFO] [loading /H/java.base/java/lang/constant/ConstantDesc.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/CloneNotSupportedException.sig]
+[INFO] [checking com.astrocharts.dto.ChartDataResponse]
+[INFO] [checking com.astrocharts.RowRecord]
+[INFO] [loading /FGHIJK/java.base/java/lang/CharSequence.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/Number.sig]
+[INFO] [checking com.astrocharts.dto.DrawingInstruction]
+[INFO] [checking com.astrocharts.dto.InstructionParams]
+[INFO] [checking com.astrocharts.dto.InstructionStyle]
+[INFO] [checking com.astrocharts.dto.DataPoint]
+[INFO] [checking com.astrocharts.dto.StudyResult]
+[INFO] [loading /BCDEFGHIJK/java.base/java/util/Collection.sig]
+[INFO] [loading /89ABCDEFGHIJK/java.base/java/util/AbstractList.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/util/AbstractCollection.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/Iterable.sig]
+[INFO] [checking com.astrocharts.dto.DatePair]
+[INFO] [checking com.astrocharts.SymbolController]
+[INFO] [loading /H/java.base/java/lang/System.sig]
+[INFO] [loading /H/java.base/java/io/PrintStream.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/Appendable.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/io/Closeable.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/io/FilterOutputStream.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/io/OutputStream.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/io/Flushable.sig]
+[INFO] [checking com.astrocharts.SharedCacheService]
+[INFO] [checking com.astrocharts.AllListsManager]
+[INFO] [loading /DEFGHIJK/java.base/java/util/AbstractMap.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/IllegalArgumentException.sig]
+[INFO] [loading /89ABCDEFGHIJK/java.base/java/lang/Throwable.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/RuntimeException.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/Exception.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/util/Set.sig]
+[INFO] [checking com.astrocharts.Commons]
+[INFO] [checking com.astrocharts.TickerList]
+[INFO] [loading /89ABCDEFGHIJK/java.base/java/io/FileDescriptor.sig]
+[INFO] [loading /HIJK/java.base/java/io/InputStreamReader.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/io/Reader.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/Readable.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/Error.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/InterruptedException.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/util/RandomAccess.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/Cloneable.sig]
+[INFO] [loading /GHIJK/java.base/java/lang/StringBuilder.sig]
+[INFO] [loading /GH/java.base/java/lang/Math.sig]
+[INFO] [loading /H/java.base/java/lang/AbstractStringBuilder.sig]
+[INFO] [loading /GHIJK/java.base/java/lang/StringBuffer.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/io/OutputStreamWriter.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/io/Writer.sig]
+[INFO] [checking com.astrocharts.studies.Study]
+[INFO] [checking com.astrocharts.studies.PlanetaryIngressStudy]
+[INFO] [loading /DEFGHIJK/java.base/java/text/DateFormat.sig]
+[INFO] [loading /DEFGHIJK/java.base/java/text/Format.sig]
+[INFO] [checking com.astrocharts.WebConfig]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-webmvc\6.1.1\spring-webmvc-6.1.1.jar(/org/springframework/web/servlet/config/annotation/CorsRegistration.class)]
+[INFO] [checking com.astrocharts.studies.LongitudinalDistanceStudy]
+[INFO] [loading /BCDEFGHIJK/java.base/java/time/temporal/Temporal.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/time/temporal/TemporalAccessor.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/time/temporal/TemporalAdjuster.sig]
+[INFO] [loading /H/java.base/java/time/chrono/ChronoLocalDate.sig]
+[INFO] [checking com.astrocharts.studies.StudyGroup]
+[INFO] [checking com.astrocharts.DataParser]
+[INFO] [loading /89ABCDEFGH/java.base/java/nio/charset/Charset.sig]
+[INFO] [loading /9ABCDEFGHIJK/java.base/java/net/URI.sig]
+[INFO] [loading C:\Users\shamk\.m2\repository\com\google\code\gson\gson\2.10.1\gson-2.10.1.jar(/com/google/gson/reflect/TypeToken.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\com\google\code\gson\gson\2.10.1\gson-2.10.1.jar(/com/google/gson/JsonSyntaxException.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\com\google\code\gson\gson\2.10.1\gson-2.10.1.jar(/com/google/gson/JsonIOException.class)]
+[INFO] [loading C:\Users\shamk\.m2\repository\com\google\code\gson\gson\2.10.1\gson-2.10.1.jar(/com/google/gson/stream/JsonReader.class)]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/reflect/Type.sig]
+[INFO] [loading /CDEFGHIJK/java.base/java/lang/invoke/TypeDescriptor.sig]
+[INFO] [loading /CDEFGHIJK/java.base/java/lang/invoke/TypeDescriptor$OfField.sig]
+[INFO] [loading /BCDEFGHIJK/java.base/java/lang/reflect/GenericDeclaration.sig]
+[INFO] [loading /H/java.base/java/lang/reflect/AnnotatedElement.sig]
+[INFO] [checking com.astrocharts.AstroChartsApplication]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\springframework\spring-context\6.1.1\spring-context-6.1.1.jar(/org/springframework/context/ConfigurableApplicationContext.class)]
+[INFO] [checking com.astrocharts.FollowStudyController]
+[INFO] [loading C:\Users\shamk\.m2\repository\org\slf4j\slf4j-api\2.0.9\slf4j-api-2.0.9.jar(/org/slf4j/Marker.class)]
+[INFO] [loading /DEFGHI/java.base/java/util/Locale.sig]
+[INFO] [total 564ms]
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[11,24] error: package com.astroservices does not exist
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[12,16] error: package com.sweph does not exist
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[21,39] error: cannot find symbol
+  symbol:   variable SweConst
+  location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[22,40] error: cannot find symbol
+  symbol:   variable SweConst
+  location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[23,43] error: cannot find symbol
+  symbol:   variable SweConst
+  location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[24,41] error: cannot find symbol
+  symbol:   variable SweConst
+  location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[25,40] error: cannot find symbol
+  symbol:   variable SweConst
+  location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[26,43] error: cannot find symbol
+  symbol:   variable SweConst
+  location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[27,42] error: cannot find symbol
+  symbol:   variable SweConst
+  location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[28,42] error: cannot find symbol
+  symbol:   variable SweConst
+  location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[29,43] error: cannot find symbol
+  symbol:   variable SweConst
+  location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[30,41] error: cannot find symbol
+  symbol:   variable SweConst
+  location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[31,40] error: cannot find symbol
+  symbol:   variable SweConst
+  location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[52,8] error: cannot find symbol
+  symbol:   class AstroServices
+  location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[52,42] error: cannot find symbol
+  symbol:   class AstroServices
+  location: class LongitudinalDistanceStudy
+[INFO] 15 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.525 s
+[INFO] Finished at: 2025-06-18T22:25:28-07:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project astrocharts-backend: Compilation failure: Compilation failure: 
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[11,24] error: package com.astroservices does not exist
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[12,16] error: package com.sweph does not exist
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[21,39] error: cannot find symbol
+[ERROR]   symbol:   variable SweConst
+[ERROR]   location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[22,40] error: cannot find symbol
+[ERROR]   symbol:   variable SweConst
+[ERROR]   location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[23,43] error: cannot find symbol
+[ERROR]   symbol:   variable SweConst
+[ERROR]   location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[24,41] error: cannot find symbol
+[ERROR]   symbol:   variable SweConst
+[ERROR]   location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[25,40] error: cannot find symbol
+[ERROR]   symbol:   variable SweConst
+[ERROR]   location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[26,43] error: cannot find symbol
+[ERROR]   symbol:   variable SweConst
+[ERROR]   location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[27,42] error: cannot find symbol
+[ERROR]   symbol:   variable SweConst
+[ERROR]   location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[28,42] error: cannot find symbol
+[ERROR]   symbol:   variable SweConst
+[ERROR]   location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[29,43] error: cannot find symbol
+[ERROR]   symbol:   variable SweConst
+[ERROR]   location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[30,41] error: cannot find symbol
+[ERROR]   symbol:   variable SweConst
+[ERROR]   location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[31,40] error: cannot find symbol
+[ERROR]   symbol:   variable SweConst
+[ERROR]   location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[52,8] error: cannot find symbol
+[ERROR]   symbol:   class AstroServices
+[ERROR]   location: class LongitudinalDistanceStudy
+[ERROR] C:\Users\shamk\CascadeProjects\astrocharts\backend\src\main\java\com\astrocharts\studies\LongitudinalDistanceStudy.java:[52,42] error: cannot find symbol
+[ERROR]   symbol:   class AstroServices
+[ERROR]   location: class LongitudinalDistanceStudy
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

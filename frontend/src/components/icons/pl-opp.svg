@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <!-- Connecting Line: Uses currentColor for the light blue stroke from your sample -->
+  <line x1="7" y1="7" x2="17" y2="17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Planet 1 (Top-Left, Blue) -->
+  <!-- Circle: fill blue, stroke is currentColor (for the light blue outline) -->
+  <circle cx="7" cy="7" r="4" fill="#007bff" stroke="currentColor" stroke-width="2"/>
+  <!-- Inner Vertical Line: darker blue -->
+  <line x1="7" y1="5" x2="7" y2="9" stroke="#0056b3" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Planet 2 (Bottom-Right, Red) -->
+  <!-- Circle: fill red, stroke is currentColor (for the light blue outline) -->
+  <circle cx="17" cy="17" r="4" fill="#dc3545" stroke="currentColor" stroke-width="2"/>
+  <!-- Inner Horizontal Line: darker red -->
+  <line x1="15" y1="17" x2="19" y2="17" stroke="#a71d2a" stroke-width="2" stroke-linecap="round"/>
+</svg>

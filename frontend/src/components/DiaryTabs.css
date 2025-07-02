@@ -1,0 +1,237 @@
+/* Debug styles */
+* {
+  /* border: 1px solid red !important; */
+}
+
+/* Tab container */
+.diary-tabs {
+  display: flex;
+  background: #f5f5f5;
+  padding: 0 0 0 12px;
+  height: 40px;
+  align-items: flex-end;
+  margin: 0;
+  position: relative;
+  z-index: 2;
+  border-bottom: 1px solid #e0cfa9;
+  overflow-x: auto;
+  overflow-y: hidden;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.diary-tabs::-webkit-scrollbar {
+  height: 6px;
+}
+
+.diary-tabs::-webkit-scrollbar-thumb {
+  background-color: #c0c0c0;
+  border-radius: 3px;
+}
+
+/* Individual tab styling */
+.diary-tab {
+  padding: 0 16px;
+  margin: 0 2px 0 0;
+  border-radius: 4px 4px 0 0;
+  background: #e0e0e0;
+  border: 1px solid #c0c0c0;
+  border-bottom: none;
+  font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 36px;
+  min-width: 100px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  box-shadow: 0 -1px 2px rgba(0,0,0,0.1);
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+/* Selected tab styling */
+.diary-tab.selected {
+  background: #fff;
+  color: #1a1a1a;
+  border-color: #c0c0c0;
+  border-bottom: 1px solid #fff;
+  height: 38px;
+  margin-bottom: -1px;
+  font-weight: 600;
+  box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
+  z-index: 3;
+  border-top: 2px solid #1a73e8;
+  position: relative;
+  top: 1px;
+}
+
+/* Hover state for non-selected tabs */
+.diary-tab:not(.selected):hover {
+  background: #f0f0f0;
+  color: #8b6b3d;
+  border-color: #d0d0d0;
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.08);
+}
+
+/* Active state (when clicking) */
+.diary-tab:active {
+  transform: translateY(1px);
+  box-shadow: 0 -1px 4px rgba(0,0,0,0.1);
+}
+
+/* Focus state for accessibility */
+.diary-tab:focus {
+  outline: 2px solid #8b6b3d;
+  outline-offset: 2px;
+  z-index: 3; /* Ensure focus ring is fully visible */
+}
+
+/* Tab content container */
+.diary-tab-content {
+  background: #fff;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  padding: 0;
+  min-height: 100px;
+  border: 1px solid #e0cfa9;
+  border-top: none;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* Icon row styling */
+.icon-row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: #f8f8f8;
+  border-bottom: 1px solid #e0e0e0;
+  margin: 0;
+  min-height: 48px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Individual icon styling */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  color: #333 !important;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  flex-shrink: 0;
+  padding: 6px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 2;
+}
+
+/* Ensure tab content takes remaining space */
+.diary-tab-content {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  position: relative;
+}
+
+/* Ensure icons are visible and properly sized */
+.icon svg {
+  width: 24px !important;
+  height: 24px !important;
+  flex-shrink: 0;
+  display: block;
+  color: inherit !important;
+  fill: currentColor !important;
+}
+
+/* Hide scrollbars but keep functionality */
+.diary-tabs::-webkit-scrollbar,
+.icon-row::-webkit-scrollbar {
+  height: 6px;
+}
+
+.diary-tabs::-webkit-scrollbar-thumb,
+.icon-row::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.diary-tabs::-webkit-scrollbar-track,
+.icon-row::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.icon:hover {
+  background-color: #e0e0e0;
+}
+
+/* Ensure SVG icons are properly sized */
+.icon svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+  color: inherit;
+}
+
+/* Style for image icons */
+.icon img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Hover and active states */
+.icon:hover {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.icon:active {
+  background-color: #e0e0e0;
+  transform: translateY(1px);
+}
+
+/* Tab content area */
+.tab-content-inner {
+  flex: 1; /* Take remaining space */
+  padding: 16px;
+  overflow-y: auto; /* Add scroll if content overflows */
+}
+
+/* Ensure proper spacing for the content area */
+.tab-content-inner > div {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}

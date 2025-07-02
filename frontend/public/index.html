@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="AstroCharts frontend" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>AstroCharts</title>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <svg width="0" height="0" style="position:absolute;z-index:-1;">
+      <defs>
+        <pattern id="dots-pattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+          <circle cx="2" cy="2" r="1" fill="rgba(0,0,0,0.5)" />
+        </pattern>
+
+        <pattern id="diagonal-hatch-pattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="10" style="stroke:rgba(0,0,0,0.5); stroke-width:1" />
+        </pattern>
+
+        <pattern id="cross-hatch-pattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+          <line x1="0" y1="0" x2="10" y2="10" style="stroke:rgba(0,0,0,0.3); stroke-width:1" />
+          <line x1="10" y1="0" x2="0" y2="10" style="stroke:rgba(0,0,0,0.3); stroke-width:1" />
+        </pattern>
+
+        <!-- Vertical Line Patterns -->
+        <pattern id="pattern-vline-black" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+          <line x1="2" y1="0" x2="2" y2="4" style="stroke:black; stroke-width:1" />
+        </pattern>
+        <pattern id="pattern-vline-red" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+          <line x1="2" y1="0" x2="2" y2="4" style="stroke:red; stroke-width:1" />
+        </pattern>
+        <pattern id="pattern-vline-green" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+          <line x1="2" y1="0" x2="2" y2="4" style="stroke:green; stroke-width:1" />
+        </pattern>
+        <pattern id="pattern-vline-blue" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+          <line x1="2" y1="0" x2="2" y2="4" style="stroke:blue; stroke-width:1" />
+        </pattern>
+        <pattern id="pattern-vline-yellow" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+          <line x1="2" y1="0" x2="2" y2="4" style="stroke:yellow; stroke-width:1" />
+        </pattern>
+        <pattern id="pattern-vline-orange" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+          <line x1="2" y1="0" x2="2" y2="4" style="stroke:orange; stroke-width:1" />
+        </pattern>
+        <pattern id="pattern-vline-purple" x="0" y="0" width="4" height="4" patternUnits="userSpaceOnUse">
+          <line x1="2" y1="0" x2="2" y2="4" style="stroke:purple; stroke-width:1" />
+        </pattern>
+      </defs>
+    </svg>
+
+    <div id="root"></div>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <!-- Center point of the icon is (12,12) -->
+
+  <!-- Lines forming the 120-degree angle from the center -->
+  <!-- Line to Planet 1 (Blue, directly above center) -->
+  <line x1="12" y1="12" x2="12" y2="5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Line to Planet 2 (Red, 120 degrees clockwise from Planet 1's line) -->
+  <line x1="12" y1="12" x2="18.1" y2="15.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Planet 1 (Blue, at the end of the vertical line) -->
+  <!-- Circle: fill blue, stroke is currentColor -->
+  <circle cx="12" cy="5" r="3.5" fill="#007bff" stroke="currentColor" stroke-width="1.5"/>
+
+  <!-- Planet 2 (Red, at the end of the other line) -->
+  <!-- Circle: fill red, stroke is currentColor -->
+  <circle cx="18.1" cy="15.5" r="3.5" fill="#dc3545" stroke="currentColor" stroke-width="1.5"/>
+</svg>

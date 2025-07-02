@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+  <!-- Main lines forming the 90-degree angle (the "cross") -->
+  <!-- Vertical line -->
+  <line x1="12" y1="2" x2="12" y2="22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  <!-- Horizontal line -->
+  <line x1="2" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Planet 1 (Top, Blue, on the vertical line) -->
+  <!-- Circle: fill blue, stroke is currentColor -->
+  <circle cx="12" cy="6" r="3.5" fill="#007bff" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Inner Vertical Line: darker blue -->
+  <line x1="12" y1="4.5" x2="12" y2="7.5" stroke="#0056b3" stroke-width="1.5" stroke-linecap="round"/>
+
+  <!-- Planet 2 (Right, Red, on the horizontal line) -->
+  <!-- Circle: fill red, stroke is currentColor -->
+  <circle cx="18" cy="12" r="3.5" fill="#dc3545" stroke="currentColor" stroke-width="1.5"/>
+  <!-- Inner Horizontal Line: darker red -->
+  <line x1="16.5" y1="12" x2="19.5" y2="12" stroke="#a71d2a" stroke-width="1.5" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,8 @@
+# Ignore Maven and IDE files
+/target/
+/.mvn/
+mvnw
+mvnw.cmd
+*.iml
+.idea/
+*.log

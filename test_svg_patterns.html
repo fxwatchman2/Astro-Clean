@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test SVG Patterns</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        h2 { margin-top: 30px; }
+        svg rect { stroke-width: 1px; }
+    </style>
+</head>
+<body>
+
+    <h1>SVG Pattern Visual Test</h1>
+
+    <svg width="0" height="0" style="position:absolute;z-index:-1;">
+      <defs>
+        <pattern id="dots-pattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+          <circle cx="2" cy="2" r="1" fill="rgba(0,0,0,0.5)" />
+        </pattern>
+
+        <pattern id="diagonal-hatch-pattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="10" style="stroke:rgba(0,0,0,0.5); stroke-width:1" />
+        </pattern>
+
+        <pattern id="cross-hatch-pattern" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+          <line x1="0" y1="0" x2="10" y2="10" style="stroke:rgba(0,0,0,0.3); stroke-width:1" />
+          <line x1="10" y1="0" x2="0" y2="10" style="stroke:rgba(0,0,0,0.3); stroke-width:1" />
+        </pattern>
+      </defs>
+    </svg>
+
+    <h2>Dots Pattern (<code>id="dots-pattern"</code>)</h2>
+    <p>Small dots. Modify <code>circle</code> attributes (cx, cy, r, fill) in the pattern definition to change appearance.</p>
+    <svg width="200" height="100">
+        <rect x="0" y="0" width="200" height="100" fill="url(#dots-pattern)" stroke="black" />
+    </svg>
+
+    <h2>Diagonal Hatch Pattern (<code>id="diagonal-hatch-pattern"</code>)</h2>
+    <p>Diagonal lines. Modify <code>line</code> attributes (stroke, stroke-width) and <code>patternTransform</code> (rotate angle) to change appearance.</p>
+    <svg width="200" height="100">
+        <rect x="0" y="0" width="200" height="100" fill="url(#diagonal-hatch-pattern)" stroke="black" />
+    </svg>
+
+    <h2>Cross Hatch Pattern (<code>id="cross-hatch-pattern"</code>)</h2>
+    <p>Crossed diagonal lines. Modify <code>line</code> attributes (stroke, stroke-width) to change appearance.</p>
+    <svg width="200" height="100">
+        <rect x="0" y="0" width="200" height="100" fill="url(#cross-hatch-pattern)" stroke="black" />
+    </svg>
+
+    <hr style="margin-top: 40px;">
+    <p><strong>Note:</strong> The <code>fill</code> and <code>stroke</code> colors within the <code>&lt;pattern&gt;</code> definitions control the pattern's appearance. For example, <code>fill="rgba(0,0,0,0.5)"</code> is semi-transparent black. You can change these to any valid SVG color (e.g., "blue", "#FF0000", "rgba(255,0,0,0.7)").</p>
+
+</body>
+</html>

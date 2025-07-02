@@ -1,0 +1,1 @@
+mvn install:install-file -Dfile=C:\jars\astro-1.0.jar -DgroupId=com.astroservice -DartifactId=astro -Dversion=1.0 -Dpackaging=jar
