@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { ThemeProvider } from '@mui/material/styles';
-import { Button, IconButton, Tooltip, Snackbar } from '@mui/material';
+import { Button, Tooltip, Snackbar } from '@mui/material';
 import GroupIcon from '@mui/icons-material/Group';
 import CurrentStudyGroupDialog from './components/CurrentStudyGroupDialog';
 import { coolWhiteTheme } from './themes';
@@ -18,7 +18,9 @@ import SpecialStudiesDialog from './components/SpecialStudiesDialog';
 import DeclinationStudyDialog from './components/DeclinationStudyDialog';
 import PlanetaryLinesDialog from './components/PlanetaryLinesDialog';
 import { useChartOverlays } from './context/ChartOverlayContext';
-import VisualUniverseDialog from './components/VisualUniverseDialog';
+import SpecialPlanetaryStudiesDialog from './components/SpecialPlanetaryStudiesDialog';
+import IconButton from '@mui/material/IconButton';
+import StarIcon from '@mui/icons-material/Star';
 
 // Snap dates to previous trading day if needed
 function snapDatesToTradingDays(dates, tradingDays) {
@@ -73,6 +75,10 @@ function StatusBar() {
 }
 
 function App() {
+  // ...other state
+  // Ensure we return a fragment for all root JSX
+
+  const [specialDialogOpen, setSpecialDialogOpen] = useState(false);
   const { addOverlay } = useChartOverlays();
   console.log('[TEST] App.js mounted');
   const [selectedSymbol, setSelectedSymbol] = useState('AAPL');
@@ -185,7 +191,6 @@ function App() {
 
   const [specialStudiesDialogOpen, setSpecialStudiesDialogOpen] = useState(false);
   const [planetaryLinesDialogOpen, setPlanetaryLinesDialogOpen] = useState(false);
-  const [visualUniverseDialogOpen, setVisualUniverseDialogOpen] = useState(false);
   const [drawingInstructions, setDrawingInstructions] = useState([]);
 
   const [barData, setBarData] = useState(null);
@@ -370,12 +375,15 @@ function App() {
       <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
         {/* AppBar Header */}
         <AppBar position="static" color="primary" elevation={2} sx={{ zIndex: 1201 }}>
-          <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              {`AstroStockCharts - ${selectedSymbol}`}
-            </Typography>
-          </Toolbar>
-        </AppBar>
+  <Toolbar>
+    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+      {`AstroStockCharts - ${selectedSymbol}`}
+    </Typography>
+    <IconButton color="primary" aria-label="open special studies" onClick={() => setSpecialDialogOpen(true)}>
+      <StarIcon />
+    </IconButton>
+  </Toolbar>
+</AppBar>
 
         {/* Main Content Area */}
         <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, overflow: 'hidden' }}>
@@ -387,7 +395,6 @@ function App() {
               onOpenSpecialStudiesDialog={() => setSpecialStudiesDialogOpen(true)}
               onOpenDeclinationStudyDialog={() => setDeclinationStudyDialogOpen(true)}
               onOpenPlanetaryLinesDialog={() => setPlanetaryLinesDialogOpen(true)}
-              onOpenVisualUniverseDialog={() => setVisualUniverseDialogOpen(true)}
               chartType={chartType}
               onToggleChartType={handleToggleChartType}
             />
@@ -398,16 +405,22 @@ function App() {
             <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' }}>
               {/* Main Chart Scrolling Buttons & Toolbar Icons */}
               <Box sx={{ position: 'absolute', top: 0, right: 16, zIndex: 10, p: 0.5, display: 'flex', gap: 1, alignItems: 'center' }}>
-                <Button variant="contained" size="small" onClick={() => eChartRef.current?.handlePage('oldest')}>Oldest</Button>
-                <Button variant="contained" size="small" onClick={() => eChartRef.current?.handlePage('next')}>Next &gt;</Button>
-                <Button variant="contained" size="small" onClick={() => eChartRef.current?.handlePage('prev')}>&lt; Prev</Button>
-                <Button variant="contained" size="small" onClick={() => eChartRef.current?.handlePage('latest')}>Latest</Button>
-                {/* Toolbar Icon for SSG Dialog */}
-                <Tooltip title="Open Current Study Group">
-                  <IconButton color="primary" onClick={handleOpenCSGDialog} size="large" data-testid="csg-toolbar-icon">
-                    <GroupIcon />
-                  </IconButton>
-                </Tooltip>
+  {/* Star Icon for Special Planetary Studies */}
+  <Tooltip title="Open Special Planetary Studies">
+    <IconButton color="primary" onClick={() => setSpecialDialogOpen(true)} size="large" data-testid="special-studies-toolbar-icon">
+      <StarIcon />
+    </IconButton>
+  </Tooltip>
+  <Button variant="contained" size="small" onClick={() => eChartRef.current?.handlePage('oldest')}>Oldest</Button>
+  <Button variant="contained" size="small" onClick={() => eChartRef.current?.handlePage('next')}>Next &gt;</Button>
+  <Button variant="contained" size="small" onClick={() => eChartRef.current?.handlePage('prev')}>&lt; Prev</Button>
+  <Button variant="contained" size="small" onClick={() => eChartRef.current?.handlePage('latest')}>Latest</Button>
+  {/* Toolbar Icon for SSG Dialog */}
+  <Tooltip title="Open Current Study Group">
+    <IconButton color="primary" onClick={handleOpenCSGDialog} size="large" data-testid="csg-toolbar-icon">
+      <GroupIcon />
+    </IconButton>
+  </Tooltip>
               </Box>
               {/* Chart Component */}
               <Box sx={{ flexGrow: 1, height: '100%', width: '100%', position: 'relative' }}>
@@ -538,24 +551,17 @@ function App() {
                 factor,          // user selection
                 dates: barData.dates
               };
-              // console.log('[PlanetaryLinesDialog] Adding overlay to context:', overlayObj);
               addOverlay(overlayObj);
-            });
-          } else {
-            // console.warn('[PlanetaryLinesDialog] Unexpected backend response format:', data);
-          }
-        } catch (e) {
-          alert('Failed to get planetary lines: ' + e.message);
+            }); 
+          } 
+        } catch (err) {
+          console.error('[PlanetaryLinesDialog] Error fetching planetary lines:', err);
         }
       }}
     />
-    <VisualUniverseDialog
-      open={visualUniverseDialogOpen}
-      onClose={() => setVisualUniverseDialogOpen(false)}
-    />
-  </ThemeProvider>
+    <SpecialPlanetaryStudiesDialog open={specialDialogOpen} onClose={() => setSpecialDialogOpen(false)} />
+    </ThemeProvider>
   );
 }
-
 
 export default App;
