@@ -458,7 +458,47 @@ const markings = getMarkings(drawingInstructions, dateMap, currentChartColors, p
             return ohlc[1] >= ohlc[0] ? currentChartColors.volumeUp : currentChartColors.volumeDown;
           }
         }
+      }
+    ];
+  } else if (chartType === 'line') {
+    // For line chart: plot closing prices as a line
+    const closeSeriesData = validatedOhlcData.map(item => (Array.isArray(item) && item.length > 1 ? item[1] : NaN));
+    mainSeries = [
+      {
+        type: 'line',
+        name: 'Close Price',
+        data: closeSeriesData,
+        showSymbol: false,
+        lineStyle: { color: currentChartColors.primary, width: 2 },
+        emphasis: { focus: 'series' },
+        z: 10,
+        markLine: {
+          silent: true,
+          data: newMarkLines,
+          animation: false
+        },
+        markArea: {
+          silent: true,
+          data: newMarkAreas,
+          animation: false
+        },
+        xAxisIndex: 0,
+        yAxisIndex: 0,
       },
+      {
+        name: 'Volume',
+        type: 'bar',
+        xAxisIndex: 1,
+        yAxisIndex: 1,
+        data: validatedVolumeData,
+        itemStyle: {
+          color: (params) => {
+            const ohlc = validatedOhlcData[params.dataIndex] || [0,0];
+            return ohlc[1] >= ohlc[0] ? currentChartColors.volumeUp : currentChartColors.volumeDown;
+          }
+        }
+      },
+      ...planetaryLinesSeries
     ];
   }
 

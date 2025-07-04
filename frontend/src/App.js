@@ -18,7 +18,8 @@ import SpecialStudiesDialog from './components/SpecialStudiesDialog';
 import DeclinationStudyDialog from './components/DeclinationStudyDialog';
 import PlanetaryLinesDialog from './components/PlanetaryLinesDialog';
 import { useChartOverlays } from './context/ChartOverlayContext';
-import SpecialPlanetaryStudiesDialog from './components/SpecialPlanetaryStudiesDialog';
+import PlanetGroupDialog from './components/PlanetGroupDialog';
+import VisualUniverseDialog from './components/VisualUniverseDialog';
 import IconButton from '@mui/material/IconButton';
 import StarIcon from '@mui/icons-material/Star';
 
@@ -78,7 +79,8 @@ function App() {
   // ...other state
   // Ensure we return a fragment for all root JSX
 
-  const [specialDialogOpen, setSpecialDialogOpen] = useState(false);
+  const [planetGroupDialogOpen, setPlanetGroupDialogOpen] = useState(false);
+  const [visualUniverseDialogOpen, setVisualUniverseDialogOpen] = useState(false);
   const { addOverlay } = useChartOverlays();
   console.log('[TEST] App.js mounted');
   const [selectedSymbol, setSelectedSymbol] = useState('AAPL');
@@ -375,19 +377,19 @@ function App() {
       <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
         {/* AppBar Header */}
         <AppBar position="static" color="primary" elevation={2} sx={{ zIndex: 1201 }}>
-  <Toolbar>
-    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-      {`AstroStockCharts - ${selectedSymbol}`}
-    </Typography>
-    <IconButton color="primary" aria-label="open special studies" onClick={() => setSpecialDialogOpen(true)}>
-      <StarIcon />
-    </IconButton>
-  </Toolbar>
-</AppBar>
+          <Toolbar>
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              {`AstroStockCharts - ${selectedSymbol}`}
+            </Typography>
+            <IconButton color="primary" aria-label="open planet group dialog" onClick={() => setPlanetGroupDialogOpen(true)}>
+              <StarIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
 
         {/* Main Content Area */}
         <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, overflow: 'hidden' }}>
-          {/* Top Toolbar */}
+          {/* ... (rest of the code remains the same) */}
           <Paper elevation={2} sx={{ borderRadius: 0, borderBottom: '1px solid #ddd', zIndex: 10 }}>
             <TabPanel
               onOpenControlsDialog={() => setStudyDialogOpen(true)}
@@ -395,6 +397,7 @@ function App() {
               onOpenSpecialStudiesDialog={() => setSpecialStudiesDialogOpen(true)}
               onOpenDeclinationStudyDialog={() => setDeclinationStudyDialogOpen(true)}
               onOpenPlanetaryLinesDialog={() => setPlanetaryLinesDialogOpen(true)}
+              onOpenVisualUniverseDialog={() => setVisualUniverseDialogOpen(true)}
               chartType={chartType}
               onToggleChartType={handleToggleChartType}
             />
@@ -407,7 +410,7 @@ function App() {
               <Box sx={{ position: 'absolute', top: 0, right: 16, zIndex: 10, p: 0.5, display: 'flex', gap: 1, alignItems: 'center' }}>
   {/* Star Icon for Special Planetary Studies */}
   <Tooltip title="Open Special Planetary Studies">
-    <IconButton color="primary" onClick={() => setSpecialDialogOpen(true)} size="large" data-testid="special-studies-toolbar-icon">
+    <IconButton color="primary" onClick={() => setPlanetGroupDialogOpen(true)} size="large" data-testid="planet-group-toolbar-icon">
       <StarIcon />
     </IconButton>
   </Tooltip>
@@ -559,7 +562,16 @@ function App() {
         }
       }}
     />
-    <SpecialPlanetaryStudiesDialog open={specialDialogOpen} onClose={() => setSpecialDialogOpen(false)} />
+    <PlanetGroupDialog
+      open={planetGroupDialogOpen}
+      onClose={() => setPlanetGroupDialogOpen(false)}
+      commandList={["Save Group", "Run Study", "Export"]}
+      onCommand={(cmd, selectedPlanets) => {
+        // TODO: Replace with backend call
+        console.log('Command:', cmd, 'Selected:', selectedPlanets);
+      }}
+    />
+    <VisualUniverseDialog open={visualUniverseDialogOpen} onClose={() => setVisualUniverseDialogOpen(false)} />
     </ThemeProvider>
   );
 }
