@@ -1,9 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { ChartOverlayContext } from '../context/ChartOverlayContext';
+import { drawStudyMarkers } from '../utils/chartUtils';
 import {
   Dialog, DialogTitle, DialogContent, DialogActions, Button, Select, MenuItem,
   Radio, RadioGroup, FormControlLabel, Typography, Paper, Box, Grid
 } from '@mui/material';
 
+const RETROGRADE_PLANETS = [
+  'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto'
+];
 const PLANETS = [
   'Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Rahu', 'Ketu'
 ];
@@ -18,6 +23,36 @@ const SpecialPlanetaryStudiesDialog = ({ open, onClose }) => {
   const [zodiac, setZodiac] = useState('sidereal');
   const [planet1, setPlanet1] = useState('Mars');
   const [rashi, setRashi] = useState(RASHIS[0]);
+  const [fromDate, setFromDate] = useState('2024-01-01');
+  const [toDate, setToDate] = useState('2025-12-31');
+
+  const { addOverlay } = useContext(ChartOverlayContext);
+
+  // Handler for the first RUN button (planet retro dates)
+  const handleRunRetroDates = async () => {
+    try {
+      const params = new URLSearchParams({
+        p: PLANETS.indexOf(planet1),
+        fromDate,
+        toDate,
+        shapeType: highlightType,
+        color,
+        thickness: 'Medium', // Or expose as a control if needed
+      });
+      const response = await fetch(`/api/planet-event/retro-dates?${params.toString()}`);
+      if (!response.ok) throw new Error('Failed to fetch retro dates');
+      const dates = await response.json();
+      drawStudyMarkers(dates, {
+        shapeType: highlightType,
+        color,
+        thickness: 'Medium', // Or expose as a control if needed
+        planet: planet1,
+        studyType: 'Retrograde',
+      }, addOverlay);
+    } catch (err) {
+      alert('Error: ' + err.message);
+    }
+  };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
@@ -73,9 +108,13 @@ const SpecialPlanetaryStudiesDialog = ({ open, onClose }) => {
           {/* Example row: Planet in Rashi */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
             <Typography>Planet</Typography>
-            <Select value={planet1} onChange={e => setPlanet1(e.target.value)} size="small">{PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}</Select>
-            <Typography>in Rashi</Typography>
-            <Select value={rashi} onChange={e => setRashi(e.target.value)} size="small">{RASHIS.map(r => <MenuItem key={r} value={r}>{r}</MenuItem>)}</Select>
+            <Select value={planet1} onChange={e => setPlanet1(e.target.value)} size="small">
+              {PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}
+            </Select>
+            <Typography>in Sign</Typography>
+            <Select size="small" value={'Mesh/Aries'}>
+              {RASHIS.map(r => <MenuItem key={r} value={r}>{r}</MenuItem>)}
+            </Select>
             <Box sx={{ ml: 'auto', display: 'flex', gap: 1 }}>
               <Button variant="contained" sx={{ backgroundColor: '#8e44ad' }}>RUN</Button>
               <Button variant="contained" sx={{ backgroundColor: '#8e44ad' }}>ADD TO CSG</Button>
@@ -85,9 +124,13 @@ const SpecialPlanetaryStudiesDialog = ({ open, onClose }) => {
           {/* Row 2: Planet in Nakshatra */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
             <Typography>Planet</Typography>
-            <Select value={planet1} onChange={e => setPlanet1(e.target.value)} size="small">{PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}</Select>
+            <Select value={planet1} onChange={e => setPlanet1(e.target.value)} size="small">
+              {PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}
+            </Select>
             <Typography>in Nakshatra</Typography>
-            <Select size="small" value={'Ashwini'}><MenuItem value={'Ashwini'}>Ashwini</MenuItem></Select>
+            <Select size="small" value={'Ashwini'}>
+              <MenuItem value={'Ashwini'}>Ashwini</MenuItem>
+            </Select>
             <Box sx={{ ml: 'auto', display: 'flex', gap: 1 }}>
               <Button variant="contained" sx={{ backgroundColor: '#8e44ad' }}>RUN</Button>
               <Button variant="contained" sx={{ backgroundColor: '#8e44ad' }}>ADD TO CSG</Button>
@@ -97,11 +140,20 @@ const SpecialPlanetaryStudiesDialog = ({ open, onClose }) => {
           {/* Row 3: Planet in Nakshatra in Charan */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
             <Typography>Planet</Typography>
-            <Select value={planet1} onChange={e => setPlanet1(e.target.value)} size="small">{PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}</Select>
+            <Select value={planet1} onChange={e => setPlanet1(e.target.value)} size="small">
+              {PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}
+            </Select>
             <Typography>in Nakshatra</Typography>
-            <Select size="small" value={'Ashwini'}><MenuItem value={'Ashwini'}>Ashwini</MenuItem></Select>
+            <Select size="small" value={'Ashwini'}>
+              <MenuItem value={'Ashwini'}>Ashwini</MenuItem>
+            </Select>
             <Typography>in Charan</Typography>
-            <Select size="small" value={'1'}><MenuItem value={'1'}>1</MenuItem><MenuItem value={'2'}>2</MenuItem><MenuItem value={'3'}>3</MenuItem><MenuItem value={'4'}>4</MenuItem></Select>
+            <Select size="small" value={'1'}>
+              <MenuItem value={'1'}>1</MenuItem>
+              <MenuItem value={'2'}>2</MenuItem>
+              <MenuItem value={'3'}>3</MenuItem>
+              <MenuItem value={'4'}>4</MenuItem>
+            </Select>
             <Box sx={{ ml: 'auto', display: 'flex', gap: 1 }}>
               <Button variant="contained" sx={{ backgroundColor: '#8e44ad' }}>RUN</Button>
               <Button variant="contained" sx={{ backgroundColor: '#8e44ad' }}>ADD TO CSG</Button>
@@ -111,94 +163,73 @@ const SpecialPlanetaryStudiesDialog = ({ open, onClose }) => {
           {/* Row 4: Planet Midpoint Between Planet And Planet */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
             <Typography>Planet</Typography>
-            <Select value={planet1} onChange={e => setPlanet1(e.target.value)} size="small">{PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}</Select>
+            <Select value={planet1} onChange={e => setPlanet1(e.target.value)} size="small">
+              {PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}
+            </Select>
             <Typography>Midpoint Between Planet</Typography>
-            <Select size="small" value={'Mars'}>{PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}</Select>
+            <Select size="small" value={'Mars'}>
+              {PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}
+            </Select>
             <Typography>And Planet</Typography>
-            <Select size="small" value={'Mars'}>{PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}</Select>
+            <Select size="small" value={'Mars'}>
+              {PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}
+            </Select>
             <Box sx={{ ml: 'auto', display: 'flex', gap: 1 }}>
               <Button variant="contained" sx={{ backgroundColor: '#8e44ad' }}>RUN</Button>
               <Button variant="contained" sx={{ backgroundColor: '#8e44ad' }}>ADD TO CSG</Button>
             </Box>
           </Box>
 
-          {/* Row 5: Planet Follows [Planet] By Degrees [N] */}
+          {/* Row: Planet is Stationary */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
             <Typography>Planet</Typography>
-            <Select value={planet1} onChange={e => setPlanet1(e.target.value)} size="small">{PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}</Select>
-            <Typography>Follows</Typography>
-            <Select size="small" value={'Mars'}>{PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}</Select>
-            <Typography>By Degrees</Typography>
-            <Select size="small" value={'1'}>{[...Array(13).keys()].map(n => <MenuItem key={n+1} value={n+1}>{n+1}</MenuItem>)}</Select>
+            <Select value={planet1} onChange={e => setPlanet1(e.target.value)} size="small">
+              {RETROGRADE_PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}
+            </Select>
+            <Typography>is Stationary</Typography>
             <Box sx={{ ml: 'auto', display: 'flex', gap: 1 }}>
               <Button variant="contained" sx={{ backgroundColor: '#8e44ad' }}>RUN</Button>
               <Button variant="contained" sx={{ backgroundColor: '#8e44ad' }}>ADD TO CSG</Button>
             </Box>
           </Box>
 
-          {/* Row 6: Planet In Each Others' Sign With Planet */}
+          {/* Row: Planet is Retrograde */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
             <Typography>Planet</Typography>
-            <Select value={planet1} onChange={e => setPlanet1(e.target.value)} size="small">{PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}</Select>
-            <Typography>In Each Others&apos; Sign With Planet</Typography>
-            <Select size="small" value={'Mars'}>{PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}</Select>
+            <Select value={planet1} onChange={e => setPlanet1(e.target.value)} size="small">
+              {RETROGRADE_PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}
+            </Select>
+            <Typography>is Retrograde</Typography>
             <Box sx={{ ml: 'auto', display: 'flex', gap: 1 }}>
               <Button variant="contained" sx={{ backgroundColor: '#8e44ad' }}>RUN</Button>
               <Button variant="contained" sx={{ backgroundColor: '#8e44ad' }}>ADD TO CSG</Button>
             </Box>
           </Box>
 
-          {/* Row 7: Planet Declination */}
+          {/* Row: Planet Close To Declination */}
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
             <Typography>Planet</Typography>
-            <Select value={planet1} onChange={e => setPlanet1(e.target.value)} size="small">{PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}</Select>
-            <Typography>Declination</Typography>
-            <Select size="small" value={''}><MenuItem value={''}></MenuItem></Select>
+            <Select value={planet1} onChange={e => setPlanet1(e.target.value)} size="small">
+              {PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}
+            </Select>
+            <Typography>Close To Declination</Typography>
+            <Select size="small" value={'Max North'}>
+              <MenuItem value={'Max North'}>Max North</MenuItem>
+              <MenuItem value={'Zero'}>Zero</MenuItem>
+              <MenuItem value={'Max South'}>Max South</MenuItem>
+            </Select>
             <Box sx={{ ml: 'auto', display: 'flex', gap: 1 }}>
               <Button variant="contained" sx={{ backgroundColor: '#8e44ad' }}>RUN</Button>
               <Button variant="contained" sx={{ backgroundColor: '#8e44ad' }}>ADD TO CSG</Button>
             </Box>
           </Box>
-
-          {/* Row 8: Planet Declination */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-            <Typography>Planet</Typography>
-            <Select value={planet1} onChange={e => setPlanet1(e.target.value)} size="small">{PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}</Select>
-            <Typography>Declination</Typography>
-            <Select size="small" value={''}><MenuItem value={''}></MenuItem></Select>
-            <Box sx={{ ml: 'auto', display: 'flex', gap: 1 }}>
-              <Button variant="contained" sx={{ backgroundColor: '#8e44ad' }}>RUN</Button>
-              <Button variant="contained" sx={{ backgroundColor: '#8e44ad' }}>ADD TO CSG</Button>
-            </Box>
-          </Box>
-
-          {/* Row 9: Planet Declination */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
-            <Typography>Planet</Typography>
-            <Select value={planet1} onChange={e => setPlanet1(e.target.value)} size="small">{PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}</Select>
-            <Typography>Declination</Typography>
-            <Select size="small" value={''}><MenuItem value={''}></MenuItem></Select>
-            <Box sx={{ ml: 'auto', display: 'flex', gap: 1 }}>
-              <Button variant="contained" sx={{ backgroundColor: '#8e44ad' }}>RUN</Button>
-              <Button variant="contained" sx={{ backgroundColor: '#8e44ad' }}>ADD TO CSG</Button>
-            </Box>
-          </Box>
-
-
         </Paper>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} sx={{ backgroundColor: '#e3f2fd', color: '#1976d2', '&:hover': { backgroundColor: '#bbdefb' } }}>CLOSE</Button>
+        <Button onClick={onClose} variant="contained" color="inherit">CLOSE</Button>
       </DialogActions>
     </Dialog>
   );
-};
-
-import PropTypes from 'prop-types';
-
-SpecialPlanetaryStudiesDialog.propTypes = {
-  open: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
 };
 
 export default SpecialPlanetaryStudiesDialog;

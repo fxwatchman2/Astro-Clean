@@ -61,6 +61,37 @@ const EChartComponent = forwardRef((props, ref) => {
   // Filter overlays for planetary lines type (assume type: 'planetaryLines')
   const planetaryLinesOverlays = overlays?.filter(o => o.type === 'planetaryLines') || [];
   console.log('[EChartComponent] planetaryLinesOverlays:', planetaryLinesOverlays);
+  // Filter overlays for vLine type (vertical lines)
+  const vLineOverlays = overlays?.filter(o => o.type === 'vLine') || [];
+  // Convert vLine overlays to ECharts markLine data
+  const vLineMarkLines = vLineOverlays.map(o => ({
+    xAxis: o.date,
+    lineStyle: {
+      color: o.color || '#FF0000',
+      width: o.thickness === 'Medium' ? 2 : 1,
+      type: 'solid'
+    },
+    name: `${o.planet || ''}-retro-${o.date || ''}`,
+    label: {
+      show: true,
+      formatter: () => `${o.planet || ''}-retro-${o.date || ''}`,
+      color: '#444',
+      fontFamily: 'Roboto, sans-serif',
+      fontWeight: 500,
+      fontSize: 12,
+      rotate: 90,
+      align: 'right',
+      verticalAlign: 'middle',
+      position: 'insideEndTop',
+      backgroundColor: 'transparent',
+      borderWidth: 0,
+      padding: [0, 0, 0, 32], // top, right, bottom, left: large gap between lower end of label and line
+    },
+    tooltip: {
+      show: true,
+      formatter: () => `${o.planet || ''}-retro-${o.date || ''}`
+    }
+  }));
 
   const chartRef = useRef(null);
   const chartContainerRef = useRef(null);
@@ -413,7 +444,7 @@ const markings = getMarkings(drawingInstructions, dateMap, currentChartColors, p
         },
         markLine: {
           silent: true,
-          data: newMarkLines,
+          data: [...newMarkLines, ...vLineMarkLines],
           animation: false
         },
         markArea: {
@@ -474,7 +505,7 @@ const markings = getMarkings(drawingInstructions, dateMap, currentChartColors, p
         z: 10,
         markLine: {
           silent: true,
-          data: newMarkLines,
+          data: [...newMarkLines, ...vLineMarkLines],
           animation: false
         },
         markArea: {

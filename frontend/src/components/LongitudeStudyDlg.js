@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, MenuItem, Box, Typography, Radio, RadioGroup, FormControlLabel, FormControl, Select } from '@mui/material';
 
+
 const planets = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Rahu', 'Ketu'];
 const planetsWithoutSun = planets.filter(p => p !== 'Sun');
 const DISPLAY_TYPES = [
@@ -85,6 +86,7 @@ export default function LongitudeStudyDlg({ open, onClose, onRun, barData, onAdd
 
 
 
+
   const handleRun = () => {
     const study = buildStudyObject();
     // Ensure correct date ordering: fromDate = oldest, toDate = newest (robust fix)
@@ -109,6 +111,7 @@ export default function LongitudeStudyDlg({ open, onClose, onRun, barData, onAdd
       if ('tuple' in study) delete study.tuple;
       console.log('[LongitudeStudyDlg] Outgoing single study payload:', study);
       if (typeof onRun === 'function') onRun(study);
+
       onClose();
     }
   };

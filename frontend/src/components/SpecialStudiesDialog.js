@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useChartOverlays } from '../context/ChartOverlayContext';
 import { 
     Dialog, DialogTitle, DialogContent, DialogActions, Button, Checkbox, FormControlLabel, 
     Radio, RadioGroup, Select, MenuItem, Typography, Box, Paper, Tooltip
@@ -14,13 +15,16 @@ const DISPLAY_TYPES = [
 ];
 
 const planetOptions = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Rahu', 'Ketu', 'Vesta', 'Chiron'];
+const retrogradePlanetOptions = [
+  'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto'
+];
 const nakshatraOptions = ['Ashwini', 'Bharani', 'Krittika', 'Rohini', 'Mrigashira', 'Ardra', 'Punarvasu', 'Pushya', 'Ashlesha', 'Magha', 'Purva Phalguni', 'Uttara Phalguni', 'Hasta', 'Chitra', 'Swati', 'Vishakha', 'Anuradha', 'Jyeshtha', 'Mula', 'Purva Ashadha', 'Uttara Ashadha', 'Shravana', 'Dhanishta', 'Shatabhisha', 'Purva Bhadrapada', 'Uttara Bhadrapada', 'Revati'];
 const charanOptions = ['ALL', '1', '2', '3', '4'];
 const signOptions = ['Aries / Mesha (मेष)', 'Taurus / Vrishabha (वृषभ)', 'Gemini / Mithuna (मिथुन)', 'Cancer / Karka (कर्क)', 'Leo / Simha (सिंह)', 'Virgo / Kanya (कन्या)', 'Libra / Tula (तुला)', 'Scorpio / Vrishchika (वृश्चिक)', 'Sagittarius / Dhanu (धनुष)', 'Capricorn / Makara (मकर)', 'Aquarius / Kumbha (कुम्भ)', 'Pisces / Meena (मीन)'];
 const declinationOptions = ['Max North', 'Zero', 'Max South'];
 const colorOptions = ['Red', 'Green', 'Blue', 'Yellow', 'Orange', 'Purple'];
 
-const StudyRow = ({ controls }) => {
+const StudyRow = ({ controls, onRun }) => {
     const isMidpointRow = controls.some(c => c.type === 'label' && c.label === 'at Midpoint');
 
     const getInitialSelections = () => {
@@ -41,6 +45,10 @@ const StudyRow = ({ controls }) => {
 
     const [selections, setSelections] = useState(getInitialSelections());
 
+    // Handler for RUN button
+    const handleRun = () => {
+        if (onRun) onRun(selections);
+    }
     const handleSelectionChange = (selectIndex, value) => {
         setSelections(prev => ({ ...prev, [selectIndex]: value }));
     };
@@ -81,7 +89,7 @@ const StudyRow = ({ controls }) => {
                 <Box sx={{ display: 'flex', gap: 1 }}>
                     <Tooltip title="Execute right away">
                         <span>
-                            <Button variant="contained" size="small" sx={{ backgroundColor: '#8e44ad', '&:hover': { backgroundColor: '#732d91' } }} disabled={buttonsDisabled}>RUN</Button>
+                            <Button variant="contained" size="small" sx={{ backgroundColor: '#8e44ad', '&:hover': { backgroundColor: '#732d91' } }} disabled={buttonsDisabled} onClick={handleRun}>RUN</Button>
                         </span>
                     </Tooltip>
                     <Tooltip title="Add to Current Study Group to execute with other studies">
@@ -97,28 +105,75 @@ const StudyRow = ({ controls }) => {
 
 StudyRow.propTypes = {
     controls: PropTypes.array.isRequired,
+    onRun: PropTypes.func,
 };
 
 const SpecialStudiesDialog = ({ open, onClose }) => {
     const [highlight, setHighlight] = useState(true);
     const [displayType, setDisplayType] = useState(DISPLAY_TYPES[0].value);
+    const [color, setColor] = useState(colorOptions[0]);
+    const { addOverlay } = useChartOverlays();
 
-        const studyDefinitions = [
+    // Helper: API call for retro/stationary
+    const fetchRetroDatesAndDraw = async (planet, studyType) => {
+        try {
+            // For retrograde/stationary, send planet index (backend expects index)
+            const planetIdx = retrogradePlanetOptions.indexOf(planet);
+            if (planetIdx === -1) throw new Error('Invalid planet selection');
+            const fromDate = '01/01/2024';
+            const toDate = '12/31/2025';
+            const shapeType = displayType || 'vLine';
+            const thickness = 'Medium';
+            const apiColor = color;
+            const url = `/api/planet-event/retro-dates?p=${planetIdx}&fromDate=${encodeURIComponent(fromDate)}&toDate=${encodeURIComponent(toDate)}&shapeType=${encodeURIComponent(shapeType)}&color=${encodeURIComponent(apiColor)}&thickness=${encodeURIComponent(thickness)}`;
+            const resp = await fetch(url);
+            if (!resp.ok) throw new Error('Failed to fetch retrograde dates');
+            const dates = await resp.json();
+            // Add only vLine overlays for each date (no planetaryLines overlays)
+        dates.forEach(date => {
+            addOverlay({
+                type: 'vLine',
+                date,
+                planet,
+                color: apiColor,
+                thickness,
+                studyType,
+            });
+        });
+        } catch (err) {
+            alert('Error fetching retrograde/stationary dates: ' + err.message);
+        }
+    };
+
+    // Only wire for rows 3 (stationary) and 7 (retrograde) in studyDefinitions
+    const handleRunForRow = (rowIdx) => async (selections) => {
+        if (rowIdx === 3) {
+            // Stationary: selections[0] is planet
+            await fetchRetroDatesAndDraw(selections[0], 'Stationary');
+        } else if (rowIdx === 7) {
+            // Retrograde: selections[0] is planet
+            await fetchRetroDatesAndDraw(selections[0], 'Retrograde');
+        }
+    };
+
+    const studyDefinitions = [
         [{type: 'label', label: 'Planet'}, {type: 'select', options: planetOptions}, {type: 'label', label: 'in Sign'}, {type: 'select', options: signOptions}],
         [{type: 'label', label: 'Planet'}, {type: 'select', options: planetOptions}, {type: 'label', label: 'in Nakshatra'}, {type: 'select', options: nakshatraOptions}, {type: 'label', label: 'in Charan'}, {type: 'select', options: charanOptions}],
         [{type: 'label', label: 'Planet'}, {type: 'select', options: planetOptions}, {type: 'label', label: 'at Midpoint'}, {type: 'select', options: planetOptions}, {type: 'label', label: 'and'}, {type: 'select', options: planetOptions}],
-        [{type: 'label', label: 'Planet'}, {type: 'select', options: planetOptions}, {type: 'label', label: 'is Stationary'}],
+        // Stationary row - use retrograde planets only
+        [{type: 'label', label: 'Planet'}, {type: 'select', options: retrogradePlanetOptions}, {type: 'label', label: 'is Stationary'}],
         [{type: 'label', label: 'Planet'}, {type: 'select', options: planetOptions}, {type: 'label', label: 'changes Sign'}],
         [{type: 'label', label: 'Planet'}, {type: 'select', options: planetOptions}, {type: 'label', label: 'changes Nakshatra'}],
         [{type: 'label', label: 'Planet'}, {type: 'select', options: planetOptions}, {type: 'label', label: 'Perigee/Apogee'}],
-        [{type: 'label', label: 'Planet'}, {type: 'select', options: planetOptions}, {type: 'label', label: 'is Retrograde'}],
+        // Retrograde row - use retrograde planets only
+        [{type: 'label', label: 'Planet'}, {type: 'select', options: retrogradePlanetOptions}, {type: 'label', label: 'is Retrograde'}],
         [{type: 'label', label: 'Planet'}, {type: 'select', options: planetOptions}, {type: 'label', label: 'Close To Declination'}, {type: 'select', options: declinationOptions}],
     ];
 
     return (
         <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
             <DialogTitle sx={{ textAlign: 'center', fontWeight: 'bold', fontSize: '1.5rem' }}>
-                Special Planetary Studies
+                The Real Special Planetary Studies
             </DialogTitle>
             <DialogContent>
                 <Box sx={{ p: 1 }}>
@@ -138,14 +193,16 @@ const SpecialStudiesDialog = ({ open, onClose }) => {
                     </RadioGroup>
                     <Box sx={{ my: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
                         <Typography>Select color:</Typography>
-                        <Select defaultValue={colorOptions[0]} size="small">
+                        <Select value={color} onChange={e => setColor(e.target.value)} size="small">
                             {colorOptions.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
                         </Select>
-
                     </Box>
-
                     {studyDefinitions.map((controls, index) => (
-                        <StudyRow key={index} controls={controls} />
+                        <StudyRow
+                            key={index}
+                            controls={controls}
+                            onRun={(index === 3 || index === 7) ? handleRunForRow(index) : undefined}
+                        />
                     ))}
                 </Box>
             </DialogContent>
