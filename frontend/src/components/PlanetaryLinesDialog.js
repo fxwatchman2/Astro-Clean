@@ -28,6 +28,8 @@ const PlanetaryLinesDialog = ({ open, onClose, onRun }) => {
   const [color, setColor] = useState(COLORS[0]);
   const [planet1, setPlanet1] = useState(PLANETS[0]);
   const [factor, setFactor] = useState('360');
+  const [planet2, setPlanet2] = useState(PLANETS[0]);
+  const [degrees2, setDegrees2] = useState('360');
   const [type, setType] = useState('solid');
   const [thickness, setThickness] = useState('light');
 
@@ -63,6 +65,42 @@ const PlanetaryLinesDialog = ({ open, onClose, onRun }) => {
                     type,
                     thickness,
                     factor
+                  });
+                }
+                onClose();
+              }}
+            >RUN</Button>
+            <Button variant="contained" sx={{ backgroundColor: '#8e44ad', '&:hover': { backgroundColor: '#732d91' } }}>ADD TO CSG</Button>
+          </Box>
+        </Box>
+
+        {/* Row 2: Planet, degrees =, value, RUN/ADD TO CSG */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 3 }}>
+          <Typography>Planet</Typography>
+          <FormControl size="small" sx={{ minWidth: 120 }}>
+            <Select value={planet2} onChange={(e) => setPlanet2(e.target.value)}>
+              {PLANETS.map(p => <MenuItem key={p} value={p}>{p}</MenuItem>)}
+            </Select>
+          </FormControl>
+          <Typography>at degrees =</Typography>
+          <TextField
+            size="small"
+            value={degrees2}
+            onChange={(e) => setDegrees2(e.target.value)}
+            sx={{ width: 80 }}
+          />
+          <Box sx={{ ml: 'auto', display: 'flex', gap: 1 }}>
+            <Button
+              variant="contained"
+              sx={{ backgroundColor: '#8e44ad', '&:hover': { backgroundColor: '#732d91' } }}
+              onClick={() => {
+                if (onRun) {
+                  onRun({
+                    planet: planet2,
+                    degrees: degrees2,
+                    color,
+                    type,
+                    thickness
                   });
                 }
                 onClose();
