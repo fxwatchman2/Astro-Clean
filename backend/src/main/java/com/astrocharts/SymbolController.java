@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ArrayList;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Collections;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.astrocharts.util.RowRecord;
@@ -34,6 +35,7 @@ public class SymbolController {
         System.out.println("symbol = " + symbol);
         List<RowRecord> stockRecList = sharedCacheService.getRowRecords(symbol);
         System.out.println("stockRecList.size() = " + stockRecList.size());
+        Collections.reverse(stockRecList); // Reverse to send in chronological order
         return stockRecList;
     }
 

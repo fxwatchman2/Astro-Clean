@@ -16,6 +16,7 @@ import swisseph.SweConst;
 	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 */
 
+@Service
 public class AstroService {
 
 	private List<String> getDates(List<PlanetTuple> pTuples) {
@@ -96,4 +97,27 @@ public class AstroService {
 	public static void main(String[] args) {
 		test();
 	}
+
+    // Returns dummy longitude events for frontend testing
+    public java.util.List<com.kalwit.services.dto.PlanetLongitudeEvent> getPlanetLongitudeDates(com.kalwit.services.dto.PlanetLongitudeDatesRequest req) {
+        java.util.List<com.kalwit.services.dto.PlanetLongitudeEvent> events = new java.util.ArrayList<>();
+        java.time.LocalDate today = java.time.LocalDate.now();
+        events.add(new com.kalwit.services.dto.PlanetLongitudeEvent(
+                today.toString(),
+                req.getPlanet(),
+                req.getDegrees(),
+                req.getShapeType(),
+                req.getColor(),
+                req.getThickness()
+        ));
+        events.add(new com.kalwit.services.dto.PlanetLongitudeEvent(
+                today.plusDays(7).toString(),
+                req.getPlanet(),
+                req.getDegrees(),
+                req.getShapeType(),
+                req.getColor(),
+                req.getThickness()
+        ));
+        return events;
+    }
 }

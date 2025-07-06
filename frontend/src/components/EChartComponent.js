@@ -9,23 +9,7 @@ import React, {
 } from 'react';
 import PropTypes from 'prop-types';
 import ReactECharts from 'echarts-for-react';
-
-const PAGE_SIZE = 200; // Number of data points to show at once
-
-const detailsPanelStyle = `
-  background-color: rgba(25, 27, 31, 0.9);
-  border: 1px solid #333;
-  border-radius: 8px;
-  padding: 12px;
-  color: #fff;
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  width: auto;
-  max-width: 250px;
-`;
-
-// Helper Functions
+import { useChartOverlays } from '../context/ChartOverlayContext';
 const formatDate = (dateStr) => {
   if (!dateStr) return '';
   const date = new Date(dateStr);
@@ -34,16 +18,21 @@ const formatDate = (dateStr) => {
 
 const createDateMap = (dates) => {
   const map = new Map();
-  dates.forEach((date, index) => {
-    if (date && typeof date === 'string') {
-      map.set(date.split('T')[0], index);
-    }
-  });
+  if (Array.isArray(dates)) {
+    dates.forEach((date, index) => {
+      if (date && typeof date === 'string') {
+        map.set(date.split('T')[0], index);
+      }
+    });
+  }
   return map;
 };
 
-import { useChartOverlays } from '../context/ChartOverlayContext';
+const PAGE_SIZE = 200; // Number of data points to show at once
 
+
+
+// Helper Functions
 const EChartComponent = forwardRef((props, ref) => {
   const {
     barData: propsBarData,
@@ -61,52 +50,151 @@ const EChartComponent = forwardRef((props, ref) => {
   // Filter overlays for planetary lines type (assume type: 'planetaryLines')
   const planetaryLinesOverlays = overlays?.filter(o => o.type === 'planetaryLines') || [];
   console.log('[EChartComponent] planetaryLinesOverlays:', planetaryLinesOverlays);
-  // Filter overlays for vLine type (vertical lines)
-  const vLineOverlays = overlays?.filter(o => o.type === 'vLine') || [];
+  // Filter overlays for longitude-dates shapes: verticalLine, circle, square
+  const dateMap = useMemo(() => createDateMap(propsBarData?.dates || []), [propsBarData?.dates]);
+
+  const longitudeShapeOverlays = useMemo(() => overlays?.filter(o => ['verticalLine', 'circle', 'square', 'longitudinal'].includes(o.type)) || [], [overlays]);
+  console.log('[EChartComponent] longitudeShapeOverlays:', longitudeShapeOverlays);
+
+  const longitudeShapeMarkLines = useMemo(() => {
+    return longitudeShapeOverlays.filter(o => o.type === 'verticalLine' || o.type === 'longitudinal').map(o => {
+      // Snap event dates to the closest available trading day.
+      const oDateStr = o.date.split('T')[0]; // Ensure YYYY-MM-DD format
+      let snappedDate;
+
+      const dateIndex = dateMap.get(oDateStr);
+      if (dateIndex !== undefined) {
+        // The event date is a trading day.
+        snappedDate = propsBarData.dates[dateIndex];
+      } else if (Array.isArray(propsBarData?.dates) && propsBarData.dates.length > 0) {
+        // If the exact date is not in our dataset, find the closest available trading day.
+        const tradingDates = propsBarData.dates.map(d => d.split('T')[0]);
+        const eventTime = new Date(oDateStr + 'T12:00:00Z').getTime();
+        const nextIndex = tradingDates.findIndex(d => d >= oDateStr);
+
+        if (nextIndex === -1) {
+          // All trading days are before the event date, snap to the last one.
+          snappedDate = propsBarData.dates[propsBarData.dates.length - 1];
+        } else if (nextIndex === 0) {
+          // All trading days are after the event date, snap to the first one.
+          snappedDate = propsBarData.dates[0];
+        } else {
+          // The event date is between two trading days. Find the closer one.
+          const prevDateStr = tradingDates[nextIndex - 1];
+          const nextDateStr = tradingDates[nextIndex];
+          const prevTime = new Date(prevDateStr + 'T12:00:00Z').getTime();
+          const nextTime = new Date(nextDateStr + 'T12:00:00Z').getTime();
+          const diffPrev = eventTime - prevTime;
+          const diffNext = nextTime - eventTime;
+          if (diffPrev <= diffNext) { // Prefer previous day in case of a tie.
+            snappedDate = propsBarData.dates[nextIndex - 1];
+          } else {
+            snappedDate = propsBarData.dates[nextIndex];
+          }
+        }
+      } else {
+        // Fallback if no trading dates are available
+        snappedDate = o.date;
+      }
+      const formattedSnappedDate = formatDate(snappedDate);
+      return {
+        xAxis: formattedSnappedDate,
+        lineStyle: {
+          color: o.color || '#1976d2',
+          width: o.thickness === 'medium' ? 2 : o.thickness === 'heavy' ? 4 : 1,
+          type: o.type === 'dashed' ? 'dashed' : o.type === 'dotted' ? 'dotted' : 'solid',
+        },
+        name: `${o.planet || ''}-deg${o.degrees || ''}-${o.date || ''}`,
+        label: {
+          show: true,
+          formatter: () => `${o.planetName || o.planet || ''} ${o.degrees || ''}° (Geocentric)\n${snappedDate || ''}`,
+          color: '#444',
+          fontFamily: 'Roboto, sans-serif',
+          fontWeight: 500,
+          fontSize: 12,
+          align: 'left',
+          verticalAlign: 'top',
+          position: 'end',
+          backgroundColor: 'transparent',
+          borderWidth: 0,
+          padding: [4, 8, 0, 8],
+        },
+        tooltip: {
+          show: true,
+          formatter: () => `${o.planet || ''} @ ${o.degrees || ''}° on ${o.date || ''}`
+        }
+      };
+    });
+  }, [longitudeShapeOverlays, dateMap, propsBarData?.dates]);
+
+  // Circles and squares as markPoints
+  const _longitudeShapeMarkPoints = useMemo(() => {
+    return longitudeShapeOverlays.filter(o => o.type === 'circle' || o.type === 'square').map(o => ({
+      coord: [o.date, o.degrees || 0],
+      symbol: o.type === 'circle' ? 'circle' : 'rect',
+      symbolSize: o.thickness === 'medium' ? 16 : o.thickness === 'heavy' ? 24 : 10,
+      itemStyle: {
+        color: o.color || '#1976d2',
+        borderWidth: 2,
+        borderColor: o.color || '#1976d2',
+      },
+      label: {
+        show: true,
+        formatter: () => `${o.planet || ''}@${o.degrees || ''}°`,
+        color: '#444',
+        fontSize: 12,
+        fontWeight: 500,
+        fontFamily: 'Roboto, sans-serif',
+        backgroundColor: 'transparent',
+        borderWidth: 0,
+      },
+      tooltip: {
+        show: true,
+        formatter: () => `${o.planet || ''} @ ${o.degrees || ''}° on ${o.date || ''}`
+      }
+    }));
+  }, [longitudeShapeOverlays]);
+
   // Convert vLine overlays to ECharts markLine data
-  const vLineMarkLines = vLineOverlays.map(o => ({
-    xAxis: o.date,
-    lineStyle: {
-      color: o.color || '#FF0000',
-      width: o.thickness === 'Medium' ? 2 : 1,
-      type: 'solid'
-    },
-    name: `${o.planet || ''}-retro-${o.date || ''}`,
-    label: {
-      show: true,
-      formatter: () => `${o.planet || ''}-retro-${o.date || ''}`,
-      color: '#444',
-      fontFamily: 'Roboto, sans-serif',
-      fontWeight: 500,
-      fontSize: 12,
-      rotate: 90,
-      align: 'right',
-      verticalAlign: 'middle',
-      position: 'insideEndTop',
-      backgroundColor: 'transparent',
-      borderWidth: 0,
-      padding: [0, 0, 0, 32], // top, right, bottom, left: large gap between lower end of label and line
-    },
-    tooltip: {
-      show: true,
-      formatter: () => `${o.planet || ''}-retro-${o.date || ''}`
-    }
-  }));
+  const vLineMarkLines = useMemo(() => {
+    const vLineOverlays = overlays?.filter(o => o.type === 'vLine') || [];
+    return vLineOverlays.map(o => ({
+      xAxis: o.date,
+      lineStyle: {
+        color: '#1976d2',
+        width: 0.5,
+        type: 'solid'
+      },
+      name: `${o.planet || ''}-retro-${o.date || ''}`,
+      label: {
+        show: true,
+        formatter: () => `${o.planet || ''}-retro-${o.date || ''}`,
+        color: '#444',
+        fontFamily: 'Roboto, sans-serif',
+        fontWeight: 500,
+        fontSize: 12,
+        rotate: 90,
+        align: 'right',
+        verticalAlign: 'middle',
+        position: 'insideEndTop',
+        backgroundColor: 'transparent',
+        borderWidth: 0,
+        padding: [0, 0, 0, 32], // top, right, bottom, left: large gap between lower end of label and line
+      },
+      tooltip: {
+        show: true,
+        formatter: () => `${o.planet || ''} retro on ${o.date || ''}`
+      }
+    }));
+  }, [overlays]);
 
   const chartRef = useRef(null);
   const chartContainerRef = useRef(null);
   const contextMenuRef = useRef(null);
-  const programmaticUpdateRef = useRef(false); // To distinguish user scroll from code scroll
 
-  const [currentDataWindowStart, setCurrentDataWindowStart] = useState(0);
 
-  // On initial load or when barData changes, focus last page by default
-  useEffect(() => {
-    if (propsBarData?.dates?.length) {
-      setCurrentDataWindowStart(Math.max(0, propsBarData.dates.length - PAGE_SIZE));
-    }
-    // eslint-disable-next-line
-  }, [propsBarData?.dates]);
+
+
   const [dividerPercent, setDividerPercent] = useState(70);
   const [contextMenuVisible, setContextMenuVisible] = useState(false);
   const [contextMenuPosition, setContextMenuPosition] = useState({ x: 0, y: 0 });
@@ -146,7 +234,6 @@ const EChartComponent = forwardRef((props, ref) => {
 
   const currentChartColors = theme === 'dark' ? darkChartColors : lightChartColors;
 
-  const lastPossibleStart = Math.max(0, (propsBarData?.dates?.length || 0) - PAGE_SIZE);
 
   // --- Backend-driven indicator overlays state ---
   // const [mainPanelIndicator, setMainPanelIndicator] = useState([]);
@@ -195,12 +282,8 @@ const EChartComponent = forwardRef((props, ref) => {
     // eslint-disable-next-line
   }, [propsBarData?.dates]);
 
-  const dateMap = useMemo(() => {
-    return propsBarData?.dates ? createDateMap(propsBarData.dates) : new Map();
-  }, [propsBarData?.dates]);
-
   // Move markings calculation to a plain variable, not a hook
-const getMarkings = (drawingInstructions, dateMap, currentChartColors, propsBarData) => {
+const getMarkings = (drawingInstructions, currentChartColors, propsBarData) => {
   const newMarkLines = [];
   const newMarkAreas = [];
   const newCustomDots = [];
@@ -330,112 +413,56 @@ const markings = getMarkings(drawingInstructions, dateMap, currentChartColors, p
       return NaN;
     });
 
-    const { newMarkLines, newMarkAreas, newCustomDots } = markings;
+    const { newCustomDots } = markings;
+    
+    const dataLength = propsBarData.dates.length;
+    // Set the initial view to the last PAGE_SIZE data points.
+    // ECharts will manage the state internally from this point on.
+    const initialStart = Math.max(0, dataLength - PAGE_SIZE);
+    const startPercent = dataLength > 0 ? (initialStart / dataLength) * 100 : 0;
+    const endPercent = 100;
 
-    // Custom series for dots/circles
-    let customDotSeries = null;
-    let customDotData = [];
-    if (newCustomDots && newCustomDots.length > 0) {
-      
+    const renderItem = (params, api) => {
+        const dot = newCustomDots[params.dataIndex];
+        if (!dot) return;
 
-    if (customDotData.length > 0) {
-      customDotSeries = {
-        type: 'custom',
-        name: 'Study Dots',
-        data: customDotData,
-        renderItem: function(params, api) {
-          // Diagnostic: Log all dots and params processed by renderItem
-          if (typeof window !== 'undefined') {
-            try {
-              // intentionally left blank
-            } catch (e) {
-              // intentionally ignore error for diagnostics
-            }
-          }
-          const dataIndex = api.value(0);
-          const yValue = api.value(1);
-          const dot = newCustomDots.find(d => d.dateIndex === dataIndex && d.y === yValue);
-          if (!dot) return;
-          let size = 20;
-          let coord = api.coord([dataIndex, yValue]);
-          return {
-            type: 'rect',
-            shape: {
-              x: coord[0] - size / 2,
-              y: coord[1] - size / 2,
-              width: size,
-              height: size
-            },
+        const { dateIndex, y, color, type } = dot;
+        const coord = api.coord([dateIndex, y]);
+        if (!coord) return;
+
+        let size = type.includes('large') ? 16 : 8;
+        let symbolShape;
+
+        if (type.includes('circle')) {
+            symbolShape = { cx: coord[0], cy: coord[1], r: size / 2 };
+        } else if (type.includes('square')) {
+            symbolShape = { x: coord[0] - size / 2, y: coord[1] - size / 2, width: size, height: size };
+        } else if (type.includes('star')) {
+            symbolShape = { cx: coord[0], cy: coord[1], n: 5, r: size };
+        } else { // default to circle
+            symbolShape = { cx: coord[0], cy: coord[1], r: size / 2 };
+        }
+
+        return {
+            type: type.includes('square') ? 'rect' : (type.includes('star') ? 'star' : 'circle'),
+            shape: symbolShape,
             style: {
-              fill: dot.color || currentChartColors.primary,
-              stroke: '#000',
-              lineWidth: 2,
-              shadowBlur: 8,
-              shadowColor: '#000'
-            }
-          };
-        },
-        z: 100
-      };
-    }
-  }
+                fill: color,
+                stroke: '#000',
+                lineWidth: 1
+            },
+            z: 100
+        };
+    };
 
-  // Compose series array
-  let mainSeries = [];
-  // --- Planetary Lines Overlay Series ---
-  let planetaryLinesSeries = [];
-  // DEBUG: Log overlay data and barData.dates
-  console.log('planetaryLinesOverlays', planetaryLinesOverlays, 'barData.dates', propsBarData?.dates?.length);
-  if (planetaryLinesOverlays.length > 0 && propsBarData?.dates?.length) {
-    // DEBUG: Log overlays at entry
-    console.log('Processing planetaryLinesOverlays:', planetaryLinesOverlays);
-    planetaryLinesOverlays.forEach((overlay) => {
-  // Each overlay: { planet, points: [{date, value}, ...] }
-  const { planet, points } = overlay;
-  // Normalize chart dates
-  const normalizeDate = dateStr => (typeof dateStr === 'string' ? dateStr.substring(0, 10) : '');
-  const chartDateArr = Array.isArray(propsBarData.dates) ? propsBarData.dates.map(normalizeDate) : [];
-  // Build a map from date to value
-  const dateToVal = {};
-  if (Array.isArray(points)) {
-    points.forEach(pt => {
-      const d = normalizeDate(pt.date);
-      dateToVal[d] = pt.value;
-    });
-  }
-  // Build aligned values array for polyline
-  const alignedValues = chartDateArr.map(d => dateToVal[d] !== undefined ? dateToVal[d] : null);
-  // Debug: Print last 10 dates and values
-  console.log(`[DEBUG] ${planet} aligned dates (last 10):`, chartDateArr.slice(-10));
-  console.log(`[DEBUG] ${planet} aligned values (last 10):`, alignedValues.slice(-10));
-  // Render as a single polyline (thick red for debug)
-  planetaryLinesSeries.push({
-    type: 'line',
-    name: `[DEBUG] ${planet} Polyline`,
-    data: alignedValues,
-    showSymbol: false,
-    lineStyle: { color: '#FF0000', width: 6, type: 'solid' },
-    emphasis: { focus: 'series' },
-    z: 1000,
-    tooltip: {
-      show: true,
-      trigger: 'item',
-      formatter: () => `Longitude line for ${planet}`,
-    },
-    xAxisIndex: 0,
-    yAxisIndex: 0,
-  });
-});
-  }
-  // DEBUG: Log the constructed planetaryLinesSeries
-  console.log('planetaryLinesSeries', planetaryLinesSeries);
-  if (chartType === 'bar') {
-    // Insert planetary lines overlays before volume
-    mainSeries = [
-      {
-        type: 'candlestick',
-        name: 'OHLC',
-        data: validatedOhlcData,
+    let mainSeries = [];
+    if (validatedOhlcData.length) {
+      mainSeries.push({
+        type: chartType === 'candlestick' ? 'candlestick' : 'line',
+        name: propsBarData?.symbol || 'OHLC',
+        data: chartType === 'candlestick' ? validatedOhlcData : validatedOhlcData.map(d => d[1]),
+        xAxisIndex: 0,
+        yAxisIndex: 0,
         itemStyle: {
           color: currentChartColors.candlestickUp,
           color0: currentChartColors.candlestickDown,
@@ -444,169 +471,131 @@ const markings = getMarkings(drawingInstructions, dateMap, currentChartColors, p
         },
         markLine: {
           silent: true,
-          data: [...newMarkLines, ...vLineMarkLines],
-          animation: false
+          symbol: 'none',
+          data: [
+            ...markings.newMarkLines,
+            ...longitudeShapeMarkLines,
+            ...vLineMarkLines,
+          ],
         },
         markArea: {
           silent: true,
-          data: newMarkAreas,
-          animation: false
+          data: markings.newMarkAreas
         },
-      },
-      {
+        markPoint: {
+          data: _longitudeShapeMarkPoints,
+        },
+      });
+
+      mainSeries.push({
         name: 'Volume',
         type: 'bar',
         xAxisIndex: 1,
         yAxisIndex: 1,
         data: validatedVolumeData,
         itemStyle: {
-          color: (params) => {
-            const ohlc = validatedOhlcData[params.dataIndex] || [0,0];
-            return ohlc[1] >= ohlc[0] ? currentChartColors.volumeUp : currentChartColors.volumeDown;
-          }
+            color: ({ dataIndex }) => {
+                const ohlcItem = validatedOhlcData[dataIndex];
+                if (!ohlcItem) return currentChartColors.volumeDown;
+                return ohlcItem[1] >= ohlcItem[0] ? currentChartColors.volumeUp : currentChartColors.volumeDown;
+            }
         }
-      },
-      {
-        name: 'Volume Panel Indicator',
-        type: 'line',
-        xAxisIndex: 1,
-        yAxisIndex: 1,
-        showSymbol: false,
-        lineStyle: { color: currentChartColors.line, width: 2 },
-        emphasis: { focus: 'series' },
-        z: 10,
-      },
-      ...planetaryLinesSeries,
-      {
-        name: 'Volume',
-        type: 'bar',
-        xAxisIndex: 1,
-        yAxisIndex: 1,
-        data: validatedVolumeData,
-        itemStyle: {
-          color: (params) => {
-            const ohlc = validatedOhlcData[params.dataIndex] || [0,0];
-            return ohlc[1] >= ohlc[0] ? currentChartColors.volumeUp : currentChartColors.volumeDown;
-          }
-        }
-      }
-    ];
-  } else if (chartType === 'line') {
-    // For line chart: plot closing prices as a line
-    const closeSeriesData = validatedOhlcData.map(item => (Array.isArray(item) && item.length > 1 ? item[1] : NaN));
-    mainSeries = [
-      {
-        type: 'line',
-        name: 'Close Price',
-        data: closeSeriesData,
-        showSymbol: false,
-        lineStyle: { color: currentChartColors.primary, width: 2 },
-        emphasis: { focus: 'series' },
-        z: 10,
-        markLine: {
-          silent: true,
-          data: [...newMarkLines, ...vLineMarkLines],
-          animation: false
-        },
-        markArea: {
-          silent: true,
-          data: newMarkAreas,
-          animation: false
-        },
+      });
+    }
+
+    if (newCustomDots.length > 0) {
+      mainSeries.push({
+        type: 'custom',
+        name: 'Custom Dots',
+        renderItem: renderItem,
+        data: newCustomDots,
         xAxisIndex: 0,
         yAxisIndex: 0,
-      },
-      {
-        name: 'Volume',
-        type: 'bar',
-        xAxisIndex: 1,
-        yAxisIndex: 1,
-        data: validatedVolumeData,
-        itemStyle: {
-          color: (params) => {
-            const ohlc = validatedOhlcData[params.dataIndex] || [0,0];
-            return ohlc[1] >= ohlc[0] ? currentChartColors.volumeUp : currentChartColors.volumeDown;
-          }
-        }
-      },
-      ...planetaryLinesSeries
-    ];
-  }
-
-    // Add custom dots/circles series if present
-    if (customDotSeries) {
-      mainSeries.push(customDotSeries);
+        z: 100,
+      });
     }
 
     return {
       animation: false,
+      theme: theme,
       grid: [
-        { left: '4%', right: '1%', height: `${dividerPercent}%` },
-        { left: '4%', right: '1%', top: `${dividerPercent}%`, height: `${95 - dividerPercent}%` }
+        { left: '4%', right: '30px', top: '5%', height: `${dividerPercent - 5}%` },
+        { left: '4%', right: '30px', bottom: '80px', height: `${90 - dividerPercent - 10}%` }
+      ],
+      xAxis: [
+        { type: 'category', data: allFormattedDates, axisLine: { onZero: false }, splitLine: { show: false }, axisLabel: { show: false }, axisTick: { show: false }, boundaryGap: true },
+        { type: 'category', data: allFormattedDates, gridIndex: 1, axisLine: { onZero: false }, axisTick: { show: true }, splitLine: { show: false }, axisLabel: { show: true, color: currentChartColors.axisLabelColor }, boundaryGap: true }
+      ],
+      yAxis: [
+        { scale: true, splitArea: { show: true, areaStyle: { color: ['rgba(250,250,250,0.05)', 'rgba(200,200,200,0.05)'] } }, splitLine: { show: true, lineStyle: { color: currentChartColors.gridColor } }, axisLabel: { color: currentChartColors.axisLabelColor, inside: false }, position: 'right' },
+        { scale: true, gridIndex: 1, splitNumber: 2, axisLabel: { show: true, color: currentChartColors.axisLabelColor, inside: false }, axisLine: { show: false }, axisTick: { show: false }, splitLine: { show: false }, position: 'right' }
+      ],
+      dataZoom: [
+        {
+          type: 'inside',
+          xAxisIndex: [0, 1],
+          start: startPercent,
+          end: endPercent,
+          minSpan: (PAGE_SIZE / dataLength) * 100,
+          maxSpan: (PAGE_SIZE / dataLength) * 100,
+        },
+        {
+          show: true,
+          xAxisIndex: [0, 1],
+          type: 'slider',
+          bottom: 10,
+          start: startPercent,
+          end: endPercent,
+          minSpan: (PAGE_SIZE / dataLength) * 100,
+          maxSpan: (PAGE_SIZE / dataLength) * 100,
+          height: 20,
+          dataBackground: {
+            lineStyle: {
+              color: '#8392A5'
+            },
+            areaStyle: {
+              color: '#8392A5'
+            }
+          },
+          fillerColor: 'rgba(131, 146, 165, 0.2)',
+        }
       ],
       tooltip: {
         trigger: 'axis',
         axisPointer: {
-          type: 'cross'
+          type: 'cross',
+          lineStyle: {
+            color: currentChartColors.crosshairColor
+          }
         },
-        position: function (pos, params, dom, rect, size) {
-          const obj = { top: 60 };
-          obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 5;
+        backgroundColor: currentChartColors.tooltipBackground,
+        borderColor: currentChartColors.tooltipBorder,
+        borderWidth: 1,
+        textStyle: {
+          color: currentChartColors.tooltipColor
+        },
+        position: (pos, params, el, elRect, size) => {
+          const obj = { top: 10 };
+          obj[['left', 'right'][+(pos[0] < size.viewSize[0] / 2)]] = 30;
           return obj;
         },
-        formatter: (params) => {
-          const dataIndex = params[0].dataIndex;
-          const ohlc = validatedOhlcData[dataIndex];
-          const volume = validatedVolumeData[dataIndex];
-          const date = allFormattedDates[dataIndex];
-
-          if (!ohlc || ohlc.some(isNaN)) return null;
-
-          return `
-            <div style="${detailsPanelStyle}">
-              <div><strong>${date}</strong></div>
-              <div>Open: ${ohlc[0].toFixed(2)}</div>
-              <div>High: ${ohlc[3].toFixed(2)}</div>
-              <div>Low: ${ohlc[2].toFixed(2)}</div>
-              <div>Close: ${ohlc[1].toFixed(2)}</div>
-              <div>Volume: ${volume}</div>
-            </div>
-          `;
-        }
       },
       axisPointer: {
         link: { xAxisIndex: 'all' },
-        label: { backgroundColor: '#777' }
+        label: {
+          backgroundColor: '#777'
+        }
       },
-      xAxis: [
-        { type: 'category', data: allFormattedDates, scale: true, boundaryGap: false, axisLine: { onZero: false }, splitLine: { show: false }, min: 'dataMin', max: 'dataMax', axisPointer: { label: { show: false } }, gridIndex: 0 },
-        { type: 'category', data: allFormattedDates, scale: true, boundaryGap: false, axisLine: { onZero: false }, splitLine: { show: false }, min: 'dataMin', max: 'dataMax', axisPointer: { z: 100 }, gridIndex: 1 },
-      ],
-      yAxis: [
-        { scale: true, splitArea: { show: false }, gridIndex: 0 },
-        {
-          scale: true,
-          gridIndex: 1,
-          splitNumber: 2,
-          axisLabel: { show: false },
-          axisLine: { show: false },
-          axisTick: { show: false },
-          splitLine: { show: false },
-          splitArea: { show: false }
-        },
-      ],
-      dataZoom: [
-        { type: 'inside', xAxisIndex: [0, 1], startValue: currentDataWindowStart, endValue: currentDataWindowStart + PAGE_SIZE -1, zoomOnMouseWheel: false, moveOnMouseWheel: true, preventDefaultMouseMove: false }
-      ],
-      series: mainSeries
+      series: mainSeries,
+      backgroundColor: 'transparent'
     };
-  }, [propsBarData, drawingInstructions, chartType, dividerPercent, currentChartColors, markings, currentDataWindowStart]);
+  }, [propsBarData, chartType, theme, dividerPercent, markings, longitudeShapeMarkLines, vLineMarkLines, _longitudeShapeMarkPoints, currentChartColors]);
 
   const handleClickOutside = useCallback((event) => {
     if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
       setContextMenuVisible(false);
     }
-  }, []);
+  }, [contextMenuRef, setContextMenuVisible]);
 
   useEffect(() => {
     if (contextMenuVisible) document.addEventListener('mousedown', handleClickOutside);
@@ -614,120 +603,140 @@ const markings = getMarkings(drawingInstructions, dateMap, currentChartColors, p
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [contextMenuVisible, handleClickOutside]);
 
-  const handleChartDataZoom = (event) => {
-    if (event.batch) {
-        const newStartValue = event.batch[0].startValue;
-        if (newStartValue !== undefined && newStartValue !== currentDataWindowStart) {
-            if (!programmaticUpdateRef.current) {
-                setCurrentDataWindowStart(newStartValue);
-            }
-        }
-    }
-  };
 
-  const handleDividerDrag = (e) => {
-    const chartRect = chartContainerRef.current.getBoundingClientRect();
-    const newDividerPercent = ((e.clientY - chartRect.top) / chartRect.height) * 100;
-    if (newDividerPercent > 10 && newDividerPercent < 90) {
-      setDividerPercent(newDividerPercent);
-    }
-  };
 
   const handleMouseDown = (e) => {
     e.preventDefault();
-    const handleMouseMove = (e) => handleDividerDrag(e);
-    const handleMouseUp = () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
+    const startY = e.clientY;
+    const startPercent = dividerPercent;
+
+    const doDrag = (moveEvent) => {
+      const deltaY = moveEvent.clientY - startY;
+      if (!chartContainerRef.current) return;
+      const chartHeight = chartContainerRef.current.clientHeight;
+      const deltaPercent = (deltaY / chartHeight) * 100;
+      setDividerPercent(Math.max(10, Math.min(90, startPercent + deltaPercent)));
     };
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
+
+    const stopDrag = () => {
+      document.removeEventListener('mousemove', doDrag);
+      document.removeEventListener('mouseup', stopDrag);
+    };
+
+    document.addEventListener('mousemove', doDrag);
+    document.addEventListener('mouseup', stopDrag);
   };
 
-  const handlePage = useCallback((direction) => {
-    let newStart;
-    if (direction === 'next') newStart = Math.min(currentDataWindowStart + PAGE_SIZE, lastPossibleStart);
-    else if (direction === 'prev') newStart = Math.max(0, currentDataWindowStart - PAGE_SIZE);
-    else if (direction === 'latest') newStart = lastPossibleStart;
-    else if (direction === 'oldest') newStart = 0;
-    setCurrentDataWindowStart(newStart);
-  }, [currentDataWindowStart, lastPossibleStart]);
+  const handlePage = (direction) => {
+    const chartInstance = chartRef.current?.getEchartsInstance();
+    const dataLength = propsBarData?.dates?.length;
+    if (!chartInstance || !dataLength) return;
+
+    // Get the current zoom state directly from the chart instance
+    const currentZoom = chartInstance.getOption().dataZoom[0];
+    const currentStartValue = currentZoom.startValue;
+
+    let newStartValue;
+
+    switch (direction) {
+      case 'prev': // Corresponds to '< PREV' button
+        newStartValue = Math.max(0, currentStartValue - PAGE_SIZE);
+        break;
+      case 'next': // Corresponds to 'NEXT >' button
+        newStartValue = Math.min(dataLength - PAGE_SIZE, currentStartValue + PAGE_SIZE);
+        break;
+      case 'oldest':
+        newStartValue = 0;
+        break;
+      case 'latest':
+        newStartValue = Math.max(0, dataLength - PAGE_SIZE);
+        break;
+      default:
+        return;
+    }
+
+    chartInstance.dispatchAction({
+      type: 'dataZoom',
+      // Specify the zoom window by data index
+      startValue: newStartValue,
+      endValue: Math.min(dataLength - 1, newStartValue + PAGE_SIZE - 1),
+    });
+  };
 
   const handleContextMenu = useCallback((params) => {
-    params.event.preventDefault();
-    const chart = chartRef.current.getEchartsInstance();
-    const pointInPixel = [params.event.offsetX, params.event.offsetY];
-    const pointInGrid = chart.convertFromPixel('grid', pointInPixel);
-    if (pointInGrid) {
-      setContextMenuPosition({ x: params.event.clientX, y: params.event.clientY });
-      setContextMenuVisible(true);
-    }
-  }, []);
+  params.event.preventDefault();
+  const chart = chartRef.current.getEchartsInstance();
+  const pointInPixel = [params.event.offsetX, params.event.offsetY];
+  const pointInGrid = chart.convertFromPixel('grid', pointInPixel);
+  if (pointInGrid) {
+    setContextMenuPosition({ x: params.event.clientX, y: params.event.clientY });
+    setContextMenuVisible(true);
+  }
+}, []);
 
-  const handleMenuItemClick = useCallback(() => {
-    setContextMenuVisible(false);
-  }, []);
+const handleMenuItemClick = useCallback(() => {
+  setContextMenuVisible(false);
+}, []);
 
-  useImperativeHandle(ref, () => ({
-    handlePage,
-    getChartInstance: () => chartRef.current?.getEchartsInstance(),
-  }));
+useImperativeHandle(ref, () => ({
+  handlePage,
+  getChartInstance: () => chartRef.current?.getEchartsInstance(),
+}));
 
-  if (propsError) return <div style={{ color: 'red', padding: '20px' }}>Error: {propsError}</div>;
+if (propsError) return <div style={{ color: 'red', padding: '20px' }}>Error: {propsError}</div>;
 
-  return (
-    <div style={{ ...style, display: 'flex', flexDirection: 'column', height: '100%' }}>
-      <div ref={chartContainerRef} style={{ flex: 1, minHeight: 0, width: '100%', position: 'relative' }}>
-        <div onMouseDown={handleMouseDown} style={{ position: 'absolute', top: `${dividerPercent}%`, left: '4%', right: '30px', height: '12px', cursor: 'row-resize', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ width: 28, height: 7, background: '#d0d5e2', borderRadius: 4, border: '1px solid #b0b0b0' }} />
-        </div>
-        <ReactECharts
-          ref={chartRef}
-          option={finalChartOptions}
-          style={{ height: '100%', width: '100%' }}
-          theme={theme}
-          onEvents={{
-            'datazoom': handleChartDataZoom,
-            'contextmenu': handleContextMenu,
-          }}
-          notMerge={false}
-          lazyUpdate={false}
-          showLoading={propsLoading}
-          opts={{ renderer: 'svg' }}
-        />
-        {contextMenuVisible && (
-          <div
-            ref={contextMenuRef}
-            style={{
-              position: 'fixed',
-              top: contextMenuPosition.y,
-              left: contextMenuPosition.x,
-              background: currentChartColors.tooltipBackground,
-              color: currentChartColors.tooltipColor,
-              border: `1px solid ${currentChartColors.tooltipBorder}`,
-              borderRadius: '4px',
-              padding: '5px 0',
-              zIndex: 1000,
-              boxShadow: '2px 2px 5px rgba(0,0,0,0.2)',
-              minWidth: '150px',
-            }}
-          >
-            {contextMenuItems.map((item, index) => (
-              <div
-                key={index}
-                onClick={handleMenuItemClick}
-                style={{ padding: '8px 12px', cursor: 'pointer' }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = currentChartColors.primary ? currentChartColors.primary + '33' : '#f0f0f0'}
-                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-              >
-                {item}
-              </div>
-            ))}
-          </div>
-        )}
+return (
+  <div style={{ ...style, display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <div ref={chartContainerRef} style={{ flex: 1, minHeight: 0, width: '100%', position: 'relative' }}>
+      <div onMouseDown={handleMouseDown} style={{ position: 'absolute', top: `${dividerPercent}%`, left: '4%', right: '30px', height: '12px', cursor: 'row-resize', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ width: 28, height: 7, background: '#d0d5e2', borderRadius: 4, border: '1px solid #b0b0b0' }} />
       </div>
+      <ReactECharts
+        ref={chartRef}
+        option={finalChartOptions}
+        style={{ height: '100%', width: '100%' }}
+        theme={theme}
+        onEvents={{
+          'contextmenu': handleContextMenu,
+        }}
+        notMerge={true}
+        lazyUpdate={true}
+        showLoading={propsLoading}
+        opts={{ renderer: 'svg' }}
+      />
+      {contextMenuVisible && (
+        <div
+          ref={contextMenuRef}
+          style={{
+            position: 'fixed',
+            top: contextMenuPosition.y,
+            left: contextMenuPosition.x,
+            background: currentChartColors.tooltipBackground,
+            color: currentChartColors.tooltipColor,
+            border: `1px solid ${currentChartColors.tooltipBorder}`,
+            borderRadius: '4px',
+            padding: '5px 0',
+            zIndex: 1000,
+            boxShadow: '2px 2px 5px rgba(0,0,0,0.2)',
+            minWidth: '150px',
+          }}
+        >
+          {contextMenuItems.map((item, index) => (
+            <div
+              key={index}
+              onClick={handleMenuItemClick}
+              style={{ padding: '8px 12px', cursor: 'pointer' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = currentChartColors.primary ? currentChartColors.primary + '33' : '#f0f0f0'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+            >
+              {item}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
-  );
+  </div>
+);
 });
 
 EChartComponent.displayName = 'EChartComponent';

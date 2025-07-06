@@ -201,7 +201,7 @@ const SpecialPlanetaryStudiesDialog = ({ open, onClose }) => {
             </Select>
             <Typography>is Retrograde</Typography>
             <Box sx={{ ml: 'auto', display: 'flex', gap: 1 }}>
-              <Button variant="contained" sx={{ backgroundColor: '#8e44ad' }}>RUN</Button>
+              <Button onClick={handleRunRetroDates} variant="contained" sx={{ backgroundColor: '#8e44ad' }}>RUN</Button>
               <Button variant="contained" sx={{ backgroundColor: '#8e44ad' }}>ADD TO CSG</Button>
             </Box>
           </Box>

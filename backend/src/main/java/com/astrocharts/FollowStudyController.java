@@ -1,5 +1,7 @@
 package com.astrocharts;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.Map;
 
 
@@ -89,6 +91,13 @@ public class FollowStudyController {
 
     private static final Logger logger = LoggerFactory.getLogger(FollowStudyController.class);
 
+    private final AstroService astroService;
+
+    @Autowired
+    public FollowStudyController(AstroService astroService) {
+        this.astroService = astroService;
+    }
+
     @GetMapping("/dates")
     public List<String> getDatesForFollows(
             @RequestParam String planet1,
@@ -102,32 +111,22 @@ public class FollowStudyController {
         if (planetNum1 == null || planetNum2 == null) {
             throw new IllegalArgumentException("Invalid planet name(s): " + planet1 + ", " + planet2);
         }
-        // Ensure date format yyyy-MM-dd
-        java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        java.time.LocalDate from;
-        java.time.LocalDate to;
-        try {
-            from = java.time.LocalDate.parse(fromDate, formatter);
-        } catch (Exception e) {
-            from = java.time.LocalDate.parse(fromDate); // fallback, will throw if invalid
-        }
-        try {
-            to = java.time.LocalDate.parse(toDate, formatter);
-        } catch (Exception e) {
-            to = java.time.LocalDate.parse(toDate); // fallback, will throw if invalid
-        }
-        String formattedFromDate = from.format(formatter);
-        String formattedToDate = to.format(formatter);
-        AstroService astroServices = new AstroService();
+
+        // The frontend might send a full ISO string (e.g., "2023-01-01T00:00:00").
+        // We only need the date part.
+        String fromDateStr = fromDate.length() > 10 ? fromDate.substring(0, 10) : fromDate;
+        String toDateStr = toDate.length() > 10 ? toDate.substring(0, 10) : toDate;
+
         System.out.println("[FollowStudyController] About to call getDegreeSeparation with: " +
             "planetNum1=" + planetNum1 + ", planetNum2=" + planetNum2 +
-            ", fromDate=" + formattedFromDate + ", toDate=" + formattedToDate +
+            ", fromDate=" + fromDateStr + ", toDate=" + toDateStr +
             ", degrees=" + degrees);
-        List<String> dates = astroServices.getDegreeSeparation(
+
+        List<String> dates = astroService.getDegreeSeparation(
             planetNum1,
             planetNum2,
-            formattedFromDate,
-            formattedToDate,
+            fromDateStr,
+            toDateStr,
             degrees
         );
         System.out.println("[FollowStudyController] getDegreeSeparation returned " + dates.size() + " dates: " + dates);

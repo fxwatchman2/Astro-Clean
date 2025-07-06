@@ -93,7 +93,7 @@ const TabPanel = ({ onOpenControlsDialog, onOpenPlanetFollowStudyDialog, onOpenS
   }}
   sx={{ p: 0.5, mx: 0.25 }}
 >
-          {chartType === 'bar' ? <ShowChartIcon style={{ color: '#1976d2' }} fontSize="small" /> : <BarChartIcon style={{ color: '#1976d2' }} fontSize="small" />}
+          {chartType === 'line' ? <BarChartIcon style={{ color: '#1976d2' }} fontSize="small" /> : <ShowChartIcon style={{ color: '#1976d2' }} fontSize="small" />}
         </IconButton>
       </Tooltip>
     </Box>
@@ -107,7 +107,7 @@ TabPanel.propTypes = {
   onOpenDeclinationStudyDialog: PropTypes.func.isRequired,
   onOpenPlanetaryLinesDialog: PropTypes.func.isRequired,
   onOpenVisualUniverseDialog: PropTypes.func.isRequired,
-  chartType: PropTypes.oneOf(['bar', 'line']).isRequired,
+  chartType: PropTypes.oneOf(['candlestick', 'line']).isRequired,
   onToggleChartType: PropTypes.func.isRequired,
 };
 

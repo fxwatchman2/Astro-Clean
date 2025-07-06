@@ -24,7 +24,10 @@ StudyRow.propTypes = {
 };
 
 
-const PlanetaryLinesDialog = ({ open, onClose, onRun }) => {
+import { useChartOverlays } from '../context/ChartOverlayContext';
+
+const PlanetaryLinesDialog = ({ open, onClose, onRun, barData }) => {
+  const { addOverlay } = useChartOverlays();
   const [color, setColor] = useState(COLORS[0]);
   const [planet1, setPlanet1] = useState(PLANETS[0]);
   const [factor, setFactor] = useState('360');
@@ -94,16 +97,63 @@ const PlanetaryLinesDialog = ({ open, onClose, onRun }) => {
               variant="contained"
               sx={{ backgroundColor: '#8e44ad', '&:hover': { backgroundColor: '#732d91' } }}
               onClick={() => {
-                if (onRun) {
-                  onRun({
-                    planet: planet2,
-                    degrees: degrees2,
-                    color,
-                    type,
-                    thickness
+                // --- NEW HANDLER: Longitude Dates Study ---
+                // Use barData.dates for correct date range
+                const datesArr = barData?.dates || [];
+                let oldestBarDate = datesArr[0] || '';
+                let newestBarDate = datesArr[datesArr.length - 1] || '';
+                // Ensure correct order
+                const [startDate, endDate] = oldestBarDate <= newestBarDate
+                  ? [oldestBarDate, newestBarDate]
+                  : [newestBarDate, oldestBarDate];
+                const payload = {
+                  planet: PLANETS.indexOf(planet2),
+                  planetName: planet2,
+                  degrees: parseFloat(degrees2),
+                  oldestBarDate: startDate,
+                  newestBarDate: endDate,
+                  shapeType: type,
+                  color,
+                  thickness
+                };
+
+                console.log('[PlanetaryLinesDialog] Sending longitude-dates POST:', payload);
+                fetch('/api/planet-event/longitude-dates', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(payload)
+                })
+                  .then(res => {
+                    if (!res.ok) throw new Error('Failed to fetch longitude dates');
+                    return res.json();
+                  })
+                  .then(events => {
+                    console.log('[PlanetaryLinesDialog] Received longitude-dates response:', events);
+                    // Add overlays for each event using ChartOverlayContext
+                    if (Array.isArray(events)) {
+                      events.forEach(ev => {
+                        // Build overlay object for chart
+                        const overlay = {
+                          type: ev.shapeType,
+                          date: ev.date,
+                          planet: ev.planet,
+                          planetName: ev.planetName || planet2,
+                          degrees: ev.degrees,
+                          color: ev.color,
+                          thickness: ev.thickness
+                        };
+                        // Use ChartOverlayContext
+                        if (typeof addOverlay === 'function') {
+                          addOverlay(overlay);
+                        }
+                      });
+                    }
+                    onClose(); // Close dialog only after success
+                  })
+                  .catch(err => {
+                    alert('Error fetching longitude dates: ' + err.message);
+                    onClose(); // Also close dialog on error
                   });
-                }
-                onClose();
               }}
             >RUN</Button>
             <Button variant="contained" sx={{ backgroundColor: '#8e44ad', '&:hover': { backgroundColor: '#732d91' } }}>ADD TO CSG</Button>

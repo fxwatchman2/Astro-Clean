@@ -4,6 +4,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
+import com.astrocharts.PlanetLongitudeEvent;
+import com.astrocharts.PlanetLongitudeDatesRequest;
+
 @RestController
 @RequestMapping("/api/planet-event")
 public class PlanetEventController {
@@ -29,6 +32,13 @@ public class PlanetEventController {
         // Pass all params to the service
         // Returns two dates in MM/dd/yyyy format for each retrograde period
         return planetEventService.getPlanetRetroDates(planet, fromDate, toDate, shapeType, color, thickness);
+    }
+
+    // New endpoint for longitude-dates
+    @PostMapping("/longitude-dates")
+    public List<PlanetLongitudeEvent> getPlanetLongitudeDates(@RequestBody PlanetLongitudeDatesRequest req) {
+        System.out.println("[PlanetEventController] Received POST /api/planet-event/longitude-dates: " + req);
+        return planetEventService.getPlanetLongitudeDates(req);
     }
 
     // Helper method to convert planet string to int index (customize as needed)
