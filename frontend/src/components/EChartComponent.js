@@ -41,7 +41,8 @@ const EChartComponent = forwardRef((props, ref) => {
     loading: propsLoading,
     error: propsError,
     style,
-    chartType
+    chartType,
+    viewMode
   } = props;
 
   // --- Planetary Lines Overlay Integration ---
@@ -161,14 +162,14 @@ const EChartComponent = forwardRef((props, ref) => {
     return vLineOverlays.map(o => ({
       xAxis: o.date,
       lineStyle: {
-        color: '#1976d2',
-        width: 0.5,
+        color: o.color ? o.color.toLowerCase() : '#1976d2',
+        width: o.thickness === 'heavy' ? 2 : o.thickness === 'medium' ? 1 : 0.5,
         type: 'solid'
       },
       name: `${o.planet || ''}-retro-${o.date || ''}`,
       label: {
         show: true,
-        formatter: () => `${o.planet || ''}-retro-${o.date || ''}`,
+        formatter: () => `${o.planet || ''} ${o.studyType === 'Stationary' ? 'direct' : 'retro'} on ${o.date}`,
         color: '#444',
         fontFamily: 'Roboto, sans-serif',
         fontWeight: 500,
@@ -390,6 +391,7 @@ const getMarkings = (drawingInstructions, currentChartColors, propsBarData) => {
 const markings = getMarkings(drawingInstructions, dateMap, currentChartColors, propsBarData);
 
   const finalChartOptions = useMemo(() => {
+    const dataLength = propsBarData?.dates?.length || 0;
     const fullOhlcArray = propsBarData?.ohlc || [];
     const fullVolumeArray = propsBarData?.volumes || [];
 
@@ -415,9 +417,6 @@ const markings = getMarkings(drawingInstructions, dateMap, currentChartColors, p
 
     const { newCustomDots } = markings;
     
-    const dataLength = propsBarData.dates.length;
-    // Set the initial view to the last PAGE_SIZE data points.
-    // ECharts will manage the state internally from this point on.
     const initialStart = Math.max(0, dataLength - PAGE_SIZE);
     const startPercent = dataLength > 0 ? (initialStart / dataLength) * 100 : 0;
     const endPercent = 100;
@@ -515,6 +514,27 @@ const markings = getMarkings(drawingInstructions, dateMap, currentChartColors, p
       });
     }
 
+    const dataZoomConfig = viewMode === 'ALL'
+      ? [
+          {
+            type: 'inside',
+            xAxisIndex: [0, 1],
+            start: 0,
+            end: 100,
+            disabled: true
+          }
+        ]
+      : [
+          {
+            type: 'inside',
+            xAxisIndex: [0, 1],
+            start: startPercent,
+            end: endPercent,
+            minSpan: dataLength > 0 ? (PAGE_SIZE / dataLength) * 100 : undefined,
+            maxSpan: dataLength > 0 ? (PAGE_SIZE / dataLength) * 100 : undefined
+          }
+        ];
+
     return {
       animation: false,
       theme: theme,
@@ -530,36 +550,7 @@ const markings = getMarkings(drawingInstructions, dateMap, currentChartColors, p
         { scale: true, splitArea: { show: true, areaStyle: { color: ['rgba(250,250,250,0.05)', 'rgba(200,200,200,0.05)'] } }, splitLine: { show: true, lineStyle: { color: currentChartColors.gridColor } }, axisLabel: { color: currentChartColors.axisLabelColor, inside: false }, position: 'right' },
         { scale: true, gridIndex: 1, splitNumber: 2, axisLabel: { show: true, color: currentChartColors.axisLabelColor, inside: false }, axisLine: { show: false }, axisTick: { show: false }, splitLine: { show: false }, position: 'right' }
       ],
-      dataZoom: [
-        {
-          type: 'inside',
-          xAxisIndex: [0, 1],
-          start: startPercent,
-          end: endPercent,
-          minSpan: (PAGE_SIZE / dataLength) * 100,
-          maxSpan: (PAGE_SIZE / dataLength) * 100,
-        },
-        {
-          show: true,
-          xAxisIndex: [0, 1],
-          type: 'slider',
-          bottom: 10,
-          start: startPercent,
-          end: endPercent,
-          minSpan: (PAGE_SIZE / dataLength) * 100,
-          maxSpan: (PAGE_SIZE / dataLength) * 100,
-          height: 20,
-          dataBackground: {
-            lineStyle: {
-              color: '#8392A5'
-            },
-            areaStyle: {
-              color: '#8392A5'
-            }
-          },
-          fillerColor: 'rgba(131, 146, 165, 0.2)',
-        }
-      ],
+      dataZoom: dataZoomConfig,
       tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -589,13 +580,13 @@ const markings = getMarkings(drawingInstructions, dateMap, currentChartColors, p
       series: mainSeries,
       backgroundColor: 'transparent'
     };
-  }, [propsBarData, chartType, theme, dividerPercent, markings, longitudeShapeMarkLines, vLineMarkLines, _longitudeShapeMarkPoints, currentChartColors]);
+  }, [propsBarData, drawingInstructions, theme, chartType, dividerPercent, markings, longitudeShapeMarkLines, vLineMarkLines, _longitudeShapeMarkPoints, currentChartColors, viewMode]);
 
   const handleClickOutside = useCallback((event) => {
     if (contextMenuRef.current && !contextMenuRef.current.contains(event.target)) {
       setContextMenuVisible(false);
     }
-  }, [contextMenuRef, setContextMenuVisible]);
+  }, []);
 
   useEffect(() => {
     if (contextMenuVisible) document.addEventListener('mousedown', handleClickOutside);
@@ -754,6 +745,7 @@ EChartComponent.propTypes = {
   error: PropTypes.string,
   style: PropTypes.object,
   chartType: PropTypes.string.isRequired,
+  viewMode: PropTypes.string.isRequired,
 };
 
 export default EChartComponent;

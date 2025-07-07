@@ -1,0 +1,119 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ----------------< com.astrocharts:astrocharts-backend >-----------------
+[INFO] Building AstroCharts Backend 1.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] >>> spring-boot:3.2.0:run (default-cli) > test-compile @ astrocharts-backend >>>
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ astrocharts-backend ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] Copying 0 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ astrocharts-backend ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 41 source files with javac [debug release 17] to target\classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventController.java:[4,31] package com.kalwit.services.dto does not exist
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventService.java:[3,27] package com.kalwit.services does not exist
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventController.java:[24,12] cannot find symbol
+  symbol:   class RetrogradeDatesResponse
+  location: class com.astrocharts.PlanetEventController
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventService.java:[15,19] cannot find symbol
+  symbol:   class AstroService
+  location: class com.astrocharts.PlanetEventService
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventService.java:[18,31] cannot find symbol
+  symbol:   class AstroService
+  location: class com.astrocharts.PlanetEventService
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventService.java:[10,1] package com.kalwit.services.dto does not exist
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/studies/LongitudinalDistanceStudy.java:[14,27] package com.kalwit.services does not exist
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/AstroChartsApplication.java:[6,27] package com.kalwit.services does not exist
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/AstroChartsApplication.java:[12,16] cannot find symbol
+  symbol:   class AstroService
+  location: class com.astrocharts.AstroChartsApplication
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/FollowStudyController.java:[35,27] package com.kalwit.services does not exist
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/FollowStudyController.java:[94,19] cannot find symbol
+  symbol:   class AstroService
+  location: class com.astrocharts.FollowStudyController
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/FollowStudyController.java:[97,34] cannot find symbol
+  symbol:   class AstroService
+  location: class com.astrocharts.FollowStudyController
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventController.java:[40,20] cannot find symbol
+  symbol:   class RetrogradeDatesResponse
+  location: class com.astrocharts.PlanetEventController
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventService.java:[33,32] package com.kalwit.services.dto does not exist
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventService.java:[33,100] package com.kalwit.services.dto does not exist
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventService.java:[43,37] package com.kalwit.services.dto does not exist
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventService.java:[54,25] incompatible types: inference variable T has incompatible bounds
+    equality constraints: com.astrocharts.PlanetLongitudeEvent
+    lower bounds: java.lang.Object
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/studies/LongitudinalDistanceStudy.java:[154,9] cannot find symbol
+  symbol:   class AstroService
+  location: class com.astrocharts.studies.LongitudinalDistanceStudy
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/studies/LongitudinalDistanceStudy.java:[154,42] cannot find symbol
+  symbol:   class AstroService
+  location: class com.astrocharts.studies.LongitudinalDistanceStudy
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/AstroChartsApplication.java:[13,28] cannot find symbol
+  symbol:   class AstroService
+  location: class com.astrocharts.AstroChartsApplication
+[INFO] 20 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.666 s
+[INFO] Finished at: 2025-07-06T22:31:39-07:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project astrocharts-backend: Compilation failure: Compilation failure: 
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventController.java:[4,31] package com.kalwit.services.dto does not exist
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventService.java:[3,27] package com.kalwit.services does not exist
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventController.java:[24,12] cannot find symbol
+[ERROR]   symbol:   class RetrogradeDatesResponse
+[ERROR]   location: class com.astrocharts.PlanetEventController
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventService.java:[15,19] cannot find symbol
+[ERROR]   symbol:   class AstroService
+[ERROR]   location: class com.astrocharts.PlanetEventService
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventService.java:[18,31] cannot find symbol
+[ERROR]   symbol:   class AstroService
+[ERROR]   location: class com.astrocharts.PlanetEventService
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventService.java:[10,1] package com.kalwit.services.dto does not exist
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/studies/LongitudinalDistanceStudy.java:[14,27] package com.kalwit.services does not exist
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/AstroChartsApplication.java:[6,27] package com.kalwit.services does not exist
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/AstroChartsApplication.java:[12,16] cannot find symbol
+[ERROR]   symbol:   class AstroService
+[ERROR]   location: class com.astrocharts.AstroChartsApplication
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/FollowStudyController.java:[35,27] package com.kalwit.services does not exist
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/FollowStudyController.java:[94,19] cannot find symbol
+[ERROR]   symbol:   class AstroService
+[ERROR]   location: class com.astrocharts.FollowStudyController
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/FollowStudyController.java:[97,34] cannot find symbol
+[ERROR]   symbol:   class AstroService
+[ERROR]   location: class com.astrocharts.FollowStudyController
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventController.java:[40,20] cannot find symbol
+[ERROR]   symbol:   class RetrogradeDatesResponse
+[ERROR]   location: class com.astrocharts.PlanetEventController
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventService.java:[33,32] package com.kalwit.services.dto does not exist
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventService.java:[33,100] package com.kalwit.services.dto does not exist
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventService.java:[43,37] package com.kalwit.services.dto does not exist
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/PlanetEventService.java:[54,25] incompatible types: inference variable T has incompatible bounds
+[ERROR]     equality constraints: com.astrocharts.PlanetLongitudeEvent
+[ERROR]     lower bounds: java.lang.Object
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/studies/LongitudinalDistanceStudy.java:[154,9] cannot find symbol
+[ERROR]   symbol:   class AstroService
+[ERROR]   location: class com.astrocharts.studies.LongitudinalDistanceStudy
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/studies/LongitudinalDistanceStudy.java:[154,42] cannot find symbol
+[ERROR]   symbol:   class AstroService
+[ERROR]   location: class com.astrocharts.studies.LongitudinalDistanceStudy
+[ERROR] /C:/Users/shamk/CascadeProjects/astrocharts/backend/src/main/java/com/astrocharts/AstroChartsApplication.java:[13,28] cannot find symbol
+[ERROR]   symbol:   class AstroService
+[ERROR]   location: class com.astrocharts.AstroChartsApplication
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException

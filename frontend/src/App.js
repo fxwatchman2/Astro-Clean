@@ -14,7 +14,7 @@ import CurrentStudyGroupDialog from './components/CurrentStudyGroupDialog';
 import { coolWhiteTheme } from './themes';
 import LongitudeStudyDlg from './components/LongitudeStudyDlg';
 import PlanetFollowStudyDialog from './components/PlanetFollowStudyDialog';
-import SpecialStudiesDialog from './components/SpecialStudiesDialog';
+import SpecialPlanetaryStudiesDialog from './components/SpecialPlanetaryStudiesDialog';
 import DeclinationStudyDialog from './components/DeclinationStudyDialog';
 import PlanetaryLinesDialog from './components/PlanetaryLinesDialog';
 import { useChartOverlays } from './context/ChartOverlayContext';
@@ -56,7 +56,7 @@ function App() {
   // Dialog states
   const [isStudyDialogOpen, setStudyDialogOpen] = useState(false);
   const [isPlanetFollowStudyDialogOpen, setPlanetFollowStudyDialogOpen] = useState(false);
-  const [isSpecialStudiesDialogOpen, setSpecialStudiesDialogOpen] = useState(false);
+  const [isSpecialPlanetaryStudiesDialogOpen, setSpecialPlanetaryStudiesDialogOpen] = useState(false);
   const [isDeclinationStudyDialogOpen, setDeclinationStudyDialogOpen] = useState(false);
   const [isPlanetaryLinesDialogOpen, setPlanetaryLinesDialogOpen] = useState(false);
   const [isVisualUniverseDialogOpen, setVisualUniverseDialogOpen] = useState(false);
@@ -64,6 +64,7 @@ function App() {
   const [isCSGDialogOpen, setCSGDialogOpen] = useState(false);
   
   const [chartType, setChartType] = useState('candlestick');
+  const [viewMode, setViewMode] = useState('DETAILS'); // 'DETAILS' or 'ALL'
   const { addOverlay, clearOverlays } = useChartOverlays();
   const theme = coolWhiteTheme;
 
@@ -333,7 +334,7 @@ function App() {
             <TabPanel
               onOpenControlsDialog={() => setStudyDialogOpen(true)}
               onOpenPlanetFollowStudyDialog={() => setPlanetFollowStudyDialogOpen(true)}
-              onOpenSpecialStudiesDialog={() => setSpecialStudiesDialogOpen(true)}
+              onOpenSpecialPlanetaryStudiesDialog={() => setSpecialPlanetaryStudiesDialogOpen(true)}
               onOpenDeclinationStudyDialog={() => setDeclinationStudyDialogOpen(true)}
               onOpenPlanetaryLinesDialog={() => setPlanetaryLinesDialogOpen(true)}
               onOpenVisualUniverseDialog={() => setVisualUniverseDialogOpen(true)}
@@ -349,17 +350,18 @@ function App() {
                     <StarIcon />
                   </IconButton>
                 </Tooltip>
-                <Button variant="contained" size="small" onClick={() => eChartRef.current?.handlePage('oldest')}>Oldest</Button>
-                <Button variant="contained" size="small" onClick={() => eChartRef.current?.handlePage('next')}>Next &gt;</Button>
-                <Button variant="contained" size="small" onClick={() => eChartRef.current?.handlePage('prev')}>&lt; Prev</Button>
-                <Button variant="contained" size="small" onClick={() => eChartRef.current?.handlePage('latest')}>Latest</Button>
+                <Button variant="contained" size="small" onClick={() => setViewMode(prev => prev === 'DETAILS' ? 'ALL' : 'DETAILS')}>{viewMode === 'DETAILS' ? 'All' : 'Details'}</Button>
+                <Button variant="contained" size="small" onClick={() => eChartRef.current?.handlePage('oldest')} disabled={viewMode === 'ALL'}>Oldest</Button>
+                <Button variant="contained" size="small" onClick={() => eChartRef.current?.handlePage('next')} disabled={viewMode === 'ALL'}>Next &gt;</Button>
+                <Button variant="contained" size="small" onClick={() => eChartRef.current?.handlePage('prev')} disabled={viewMode === 'ALL'}>&lt; Prev</Button>
+                <Button variant="contained" size="small" onClick={() => eChartRef.current?.handlePage('latest')} disabled={viewMode === 'ALL'}>Latest</Button>
                 <Tooltip title="Open Current Study Group">
                   <IconButton color="primary" onClick={handleOpenCSGDialog} size="large" data-testid="csg-toolbar-icon">
                     <GroupIcon />
                   </IconButton>
                 </Tooltip>
               </Box>
-              <Box sx={{ flexGrow: 1, height: '100%', width: '100%', position: 'relative' }}>
+              <Box sx={{ flexGrow: 1, width: '100%', position: 'relative', display: 'flex', flexDirection: 'column' }}>
                 {loading && (
                   <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 5, backgroundColor: 'rgba(255, 255, 255, 0.5)' }}>
                     <Typography>Loading chart data...</Typography>
@@ -373,6 +375,7 @@ function App() {
                 {!loading && !error && barData && barData.dates.length > 0 && (
                   <EChartComponent
                     ref={eChartRef}
+                    style={{ flex: 1 }}
                     symbol={selectedSymbol}
                     barData={barData}
                     loading={loading}
@@ -381,6 +384,7 @@ function App() {
                     initialScrollDate={initialScrollDate}
                     theme={theme.palette.mode}
                     chartType={chartType}
+                    viewMode={viewMode}
                   />
                 )}
               </Box>
@@ -415,9 +419,9 @@ function App() {
         onClose={() => setPlanetFollowStudyDialogOpen(false)}
         onRun={handleRunSingleStudy}
       />
-      <SpecialStudiesDialog
-        open={isSpecialStudiesDialogOpen}
-        onClose={() => setSpecialStudiesDialogOpen(false)}
+      <SpecialPlanetaryStudiesDialog
+        open={isSpecialPlanetaryStudiesDialogOpen}
+        onClose={() => setSpecialPlanetaryStudiesDialogOpen(false)}
         onRun={handleRunSingleStudy}
       />
       <DeclinationStudyDialog

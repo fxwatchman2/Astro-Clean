@@ -48,7 +48,7 @@ const ICONS = [
   // Chart style toggle icon is injected dynamically as the last icon
 ];
 
-const TabPanel = ({ onOpenControlsDialog, onOpenPlanetFollowStudyDialog, onOpenSpecialStudiesDialog, onOpenDeclinationStudyDialog, onOpenPlanetaryLinesDialog, onOpenVisualUniverseDialog, chartType, onToggleChartType }) => {
+const TabPanel = ({ onOpenControlsDialog, onOpenPlanetFollowStudyDialog, onOpenSpecialPlanetaryStudiesDialog, onOpenDeclinationStudyDialog, onOpenPlanetaryLinesDialog, onOpenVisualUniverseDialog, chartType, onToggleChartType }) => {
   const handleIconClick = (action) => {
     switch (action) {
       case 'open_controls':
@@ -59,7 +59,7 @@ const TabPanel = ({ onOpenControlsDialog, onOpenPlanetFollowStudyDialog, onOpenS
         if (onOpenPlanetFollowStudyDialog) onOpenPlanetFollowStudyDialog();
         break;
       case 'open_special_studies':
-        if (onOpenSpecialStudiesDialog) onOpenSpecialStudiesDialog();
+        if (onOpenSpecialPlanetaryStudiesDialog) onOpenSpecialPlanetaryStudiesDialog();
         break;
       case 'open_declination_study':
         if (onOpenDeclinationStudyDialog) onOpenDeclinationStudyDialog();
@@ -103,7 +103,7 @@ const TabPanel = ({ onOpenControlsDialog, onOpenPlanetFollowStudyDialog, onOpenS
 TabPanel.propTypes = {
   onOpenControlsDialog: PropTypes.func.isRequired,
   onOpenPlanetFollowStudyDialog: PropTypes.func.isRequired,
-  onOpenSpecialStudiesDialog: PropTypes.func.isRequired,
+  onOpenSpecialPlanetaryStudiesDialog: PropTypes.func.isRequired,
   onOpenDeclinationStudyDialog: PropTypes.func.isRequired,
   onOpenPlanetaryLinesDialog: PropTypes.func.isRequired,
   onOpenVisualUniverseDialog: PropTypes.func.isRequired,

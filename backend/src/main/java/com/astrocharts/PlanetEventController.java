@@ -1,11 +1,12 @@
 package com.astrocharts;
 
-import org.springframework.web.bind.annotation.*;
+import com.kalwit.services.dto.PlanetLongitudeDatesRequest;
+import com.kalwit.services.dto.PlanetLongitudeEvent;
+import com.kalwit.services.dto.PlanetEventResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
-import com.astrocharts.PlanetLongitudeEvent;
-import com.astrocharts.PlanetLongitudeDatesRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/planet-event")
@@ -20,18 +21,43 @@ public class PlanetEventController {
 
     // Example: GET /api/planet-event/retro-dates?p=5&shapeType=Circle&color=Red&thickness=Medium
     @GetMapping("/retro-dates")
-    public List<String> getPlanetRetroDates(
-            @RequestParam("p") String planetStr,
+    public PlanetEventResponse getPlanetRetroDates(
+            @RequestParam("planet") String planet,
+            @RequestParam("studyType") String studyType,
             @RequestParam("fromDate") String fromDate,
             @RequestParam("toDate") String toDate,
             @RequestParam("shapeType") String shapeType,
             @RequestParam("color") String color,
             @RequestParam(value = "thickness", required = false, defaultValue = "Medium") String thickness
     ) {
-        int planet = parsePlanet(planetStr);
-        // Pass all params to the service
-        // Returns two dates in MM/dd/yyyy format for each retrograde period
-        return planetEventService.getPlanetRetroDates(planet, fromDate, toDate, shapeType, color, thickness);
+        Integer planetNum = com.astrocharts.studies.LongitudinalDistanceStudy.getPlanetNumber(planet);
+        if (planetNum == null) {
+            throw new IllegalArgumentException("Invalid planet name: " + planet);
+        }
+
+        List<String> dates = planetEventService.getPlanetRetroDates(planetNum, fromDate, toDate);
+
+        return new PlanetEventResponse(dates, shapeType, color, parseThickness(thickness));
+    }
+
+    @GetMapping("/direct-dates")
+    public PlanetEventResponse getPlanetDirectDates(
+            @RequestParam("planet") String planet,
+            @RequestParam("studyType") String studyType,
+            @RequestParam("fromDate") String fromDate,
+            @RequestParam("toDate") String toDate,
+            @RequestParam("shapeType") String shapeType,
+            @RequestParam("color") String color,
+            @RequestParam(value = "thickness", required = false, defaultValue = "Medium") String thickness
+    ) {
+        Integer planetNum = com.astrocharts.studies.LongitudinalDistanceStudy.getPlanetNumber(planet);
+        if (planetNum == null) {
+            throw new IllegalArgumentException("Invalid planet name: " + planet);
+        }
+
+        List<String> dates = planetEventService.getPlanetDirectDates(planetNum, fromDate, toDate);
+
+        return new PlanetEventResponse(dates, shapeType, color, parseThickness(thickness));
     }
 
     // New endpoint for longitude-dates
@@ -41,13 +67,23 @@ public class PlanetEventController {
         return planetEventService.getPlanetLongitudeDates(req);
     }
 
-    // Helper method to convert planet string to int index (customize as needed)
-    private int parsePlanet(String planetStr) {
-        try {
-            return Integer.parseInt(planetStr);
-        } catch (NumberFormatException e) {
-            // TODO: Add logic to map planet names to indices if needed
-            throw new IllegalArgumentException("Invalid planet: " + planetStr);
+    private int parseThickness(String thicknessStr) {
+        if (thicknessStr == null) {
+            return 2; // Default to medium
+        }
+        switch (thicknessStr.toLowerCase()) {
+            case "thin":
+                return 1;
+            case "medium":
+                return 2;
+            case "thick":
+                return 3;
+            default:
+                try {
+                    return Integer.parseInt(thicknessStr);
+                } catch (NumberFormatException e) {
+                    return 2; // Default to medium if parsing fails
+                }
         }
     }
 }

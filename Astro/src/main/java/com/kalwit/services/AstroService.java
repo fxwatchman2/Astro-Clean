@@ -16,7 +16,7 @@ import swisseph.SweConst;
 	++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 */
 
-@Service
+
 public class AstroService {
 
 	private List<String> getDates(List<PlanetTuple> pTuples) {

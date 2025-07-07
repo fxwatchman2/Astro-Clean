@@ -23,9 +23,23 @@
  *   @param {string} options.studyType - Label for annotation
  * @param {function} addOverlay - Overlay adding function from ChartOverlayContext
  */
+function convertDateToAppFormat(dateStr) {
+  if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+    return dateStr; 
+  }
+  const [year, month, day] = dateStr.split('-');
+  return `${month}/${day}/${year}`;
+}
+
 export function drawStudyMarkers(dates, options, addOverlay) {
+  console.log('[chartUtils] drawStudyMarkers called with dates:', dates, 'and options:', options);
   const { shapeType, color, thickness, planet, studyType } = options;
+  if (!Array.isArray(dates)) {
+    console.error('[chartUtils] drawStudyMarkers expected an array of dates, but received:', dates);
+    return;
+  }
   dates.forEach(date => {
+    const appFormattedDate = convertDateToAppFormat(date);
     // Add as planetaryLines overlay (for future-proofing)
     addOverlay({
       type: 'planetaryLines',
@@ -34,12 +48,16 @@ export function drawStudyMarkers(dates, options, addOverlay) {
       color,
       thickness,
       studyType,
-      points: [{ date, value: null }], // <-- match EChartComponent expectation
+      points: [{ 
+        date: appFormattedDate, 
+        poiname: `${planet} ${studyType === 'Stationary' ? 'direct' : 'retro'} on ${appFormattedDate}`, 
+        value: null 
+      }], // <-- match EChartComponent expectation
     });
     // Also add as vLine overlay for markLine compatibility
     addOverlay({
       type: 'vLine',
-      date,
+      date: appFormattedDate,
       planet,
       color,
       thickness,
