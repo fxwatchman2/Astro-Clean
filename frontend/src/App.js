@@ -20,6 +20,7 @@ import PlanetaryLinesDialog from './components/PlanetaryLinesDialog';
 import { useChartOverlays } from './context/ChartOverlayContext';
 import PlanetGroupDialog from './components/PlanetGroupDialog';
 import VisualUniverseDialog from './components/VisualUniverseDialog';
+import AreaHighlightDialog from './components/AreaHighlightDialog';
 import IconButton from '@mui/material/IconButton';
 import StarIcon from '@mui/icons-material/Star';
 
@@ -62,6 +63,7 @@ function App() {
   const [isVisualUniverseDialogOpen, setVisualUniverseDialogOpen] = useState(false);
   const [isPlanetGroupDialogOpen, setPlanetGroupDialogOpen] = useState(false);
   const [isCSGDialogOpen, setCSGDialogOpen] = useState(false);
+  const [isAreaHighlightDialogOpen, setIsAreaHighlightDialogOpen] = useState(false);
   
   const [chartType, setChartType] = useState('candlestick');
   const [viewMode, setViewMode] = useState('DETAILS'); // 'DETAILS' or 'ALL'
@@ -315,6 +317,10 @@ function App() {
     }
   }, [barData, addOverlay]);
 
+  const handleOpenAreaHighlightDialog = () => setIsAreaHighlightDialogOpen(true);
+
+  const handleCloseAreaHighlightDialog = () => setIsAreaHighlightDialogOpen(false);
+
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ display: 'flex', flexDirection: 'column', height: '100vh', overflow: 'hidden' }}>
@@ -345,9 +351,19 @@ function App() {
           <Box sx={{ display: 'flex', flexGrow: 1, overflow: 'hidden' }}>
             <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden', position: 'relative' }}>
               <Box sx={{ position: 'absolute', top: 0, right: 16, zIndex: 10, p: 0.5, display: 'flex', gap: 1, alignItems: 'center' }}>
-                <Tooltip title="Open Special Planetary Studies">
-                  <IconButton color="primary" onClick={() => setPlanetGroupDialogOpen(true)} size="large" data-testid="planet-group-toolbar-icon">
-                    <StarIcon />
+                <Tooltip title="Planet Groups">
+                  <IconButton color="primary" onClick={() => setPlanetGroupDialogOpen(true)} size="large">
+                    <Typography sx={{ fontSize: '24px' }}>&#9783;</Typography>
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Planetary Aspects">
+                  <IconButton color="primary" onClick={handleOpenAreaHighlightDialog} size="large">
+                    <Typography sx={{ fontSize: '24px' }}>&#8413;</Typography>
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title="Visual Universe">
+                  <IconButton color="primary" onClick={() => setVisualUniverseDialogOpen(true)} size="large">
+                    <Typography sx={{ fontSize: '24px' }}>&#9738;</Typography>
                   </IconButton>
                 </Tooltip>
                 <Button variant="contained" size="small" onClick={() => setViewMode(prev => prev === 'DETAILS' ? 'ALL' : 'DETAILS')}>{viewMode === 'DETAILS' ? 'All' : 'Details'}</Button>
@@ -443,6 +459,7 @@ function App() {
         open={isVisualUniverseDialogOpen}
         onClose={() => setVisualUniverseDialogOpen(false)}
       />
+      <AreaHighlightDialog open={isAreaHighlightDialogOpen} onClose={handleCloseAreaHighlightDialog} />
       
       <Snackbar
         open={csgSnackbarOpen}
